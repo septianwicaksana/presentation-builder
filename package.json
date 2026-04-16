@@ -1,0 +1,9 @@
+{
+  "name": "vercel-presentation-deck",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npx serve public",
+    "start": "npx serve public"
+  }
+}

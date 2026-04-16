@@ -1,3 +1,8 @@
+---
+name: vercel-git-repo-bootstrapper
+description: Setup repo structure, Vercel config, and Git workflow for presentation projects
+---
+
 # Vercel Git Repo Bootstrapper
 
 A repository setup and deployment bootstrap skill for creating presentation projects that are ready for Vercel deployment and Git-based collaboration from the start.

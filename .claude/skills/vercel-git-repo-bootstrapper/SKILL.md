@@ -1,3 +1,8 @@
+---
+name: html-presentation-builder
+description: Build a complete browser-ready HTML slide deck with embedded CSS, JavaScript, sidebar navigation, and keyboard controls
+---
+
 # HTML Presentation Builder
 
 A production skill for creating a complete HTML slide deck with embedded CSS and JavaScript.

@@ -1,3 +1,8 @@
+---
+name: presentation-strategist
+description: Turn raw material into a structured slide plan with audience-first narrative and clear messaging
+---
+
 # Presentation Strategist
 
 A communication strategy skill for building clear, persuasive, and professional presentations for company needs.
