@@ -3,2100 +3,1743 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Emerald Pedicle System — Pengetahuan Produk</title>
+<title>Emerald Pedicle Screw System — Hospital Procurement Pitch</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --bg:           #f4f1ec;
+  --card:         #ffffff;
+  --text:         #1c1915;
+  --muted:        #6b6560;
+  --accent:       #c4891a;
+  --accent-light: #f0d9b0;
+  --accent-dark:  #8a5f0d;
+  --border:       #e0d8cc;
+  --dark:         #1c1915;
+  --sidebar-w:    200px;
+  --header-h:     52px;
+  --bottom-h:     60px;
+  --radius:       12px;
+  --shadow:       0 2px 12px rgba(0,0,0,.08);
+}
 
-  :root {
-    --bg:        #f4f1ec;
-    --surface:   #ffffff;
-    --sidebar:   #ece8e1;
-    --accent:    #c4891a;
-    --accent-lt: rgba(196,137,26,0.1);
-    --accent-bd: rgba(196,137,26,0.28);
-    --text:      #1c1915;
-    --text-2:    #6e6560;
-    --text-3:    #a09690;
-    --border:    rgba(28,25,21,0.1);
-    --border-lt: rgba(28,25,21,0.065);
-    --card:      #ffffff;
-    --card-bd:   rgba(28,25,21,0.09);
-  }
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-  }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
 
-  /* ── Sidebar ── */
-  #sidebar {
-    width: 210px;
-    min-width: 210px;
-    background: var(--sidebar);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 24px 0;
-    overflow-y: auto;
-    z-index: 10;
-  }
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  .sidebar-logo {
-    padding: 0 20px 20px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 12px;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
-  .sidebar-brand {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--accent);
-    letter-spacing: 0.02em;
-    display: block;
-    margin-bottom: 2px;
-  }
+@keyframes barExpand {
+  from { width: 0; }
+  to   { width: var(--target, 0%); }
+}
 
-  .sidebar-sub {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-3);
-  }
+@keyframes coverReveal {
+  0%   { opacity: 0; transform: translateY(28px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dividerGrow {
+  from { width: 0; }
+  to   { width: 60px; }
+}
+
+@keyframes pulseAccent {
+  0%,100% { box-shadow: 0 0 0 0 rgba(196,137,26,.3); }
+  50%      { box-shadow: 0 0 0 8px rgba(196,137,26,0); }
+}
+
+/* ═══════════════════════════════════════
+   MOBILE HEADER
+═══════════════════════════════════════ */
+#mobile-header {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--dark);
+  z-index: 200;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+#hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+#hamburger span {
+  display: block;
+  width: 22px; height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: transform .25s, opacity .25s;
+}
+
+#hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+#hamburger.open span:nth-child(2) { opacity: 0; }
+#hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+#mobile-brand {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+#mobile-counter {
+  color: #a09890;
+  font-size: 12px;
+  letter-spacing: .5px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   BACKDROP
+═══════════════════════════════════════ */
+#backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 150;
+  opacity: 0;
+  transition: opacity .25s;
+}
+#backdrop.visible { opacity: 1; }
+
+/* ═══════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--dark);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0 16px;
+  gap: 2px;
+  overflow-y: auto;
+  z-index: 300;
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+}
+
+#sidebar .brand {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0 16px 20px;
+  border-bottom: 1px solid #2e2a25;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.chapter-btn {
+  background: none;
+  border: none;
+  color: #a09890;
+  font-size: 11.5px;
+  text-align: left;
+  padding: 9px 16px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background .15s, color .15s, border-color .15s;
+  line-height: 1.4;
+}
+.chapter-btn:hover { color: #e0d8cc; background: #252118; }
+.chapter-btn.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: #252118;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════
+   MAIN AREA
+═══════════════════════════════════════ */
+#main {
+  margin-left: var(--sidebar-w);
+  position: relative;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════
+   COUNTER (desktop)
+═══════════════════════════════════════ */
+#counter {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  z-index: 50;
+  letter-spacing: .5px;
+  background: rgba(244,241,236,.85);
+  padding: 4px 10px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* ═══════════════════════════════════════
+   SLIDES
+═══════════════════════════════════════ */
+.slide {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 72px 60px 80px;
+  min-height: 100vh;
+}
+
+.slide.active {
+  display: flex;
+  animation: fadeUp .4s cubic-bezier(.25,.8,.25,1) forwards;
+}
+
+/* Stagger children on active */
+.slide.active .stagger {
+  opacity: 0;
+  animation: fadeUp .45s ease forwards;
+}
+.slide.active .stagger:nth-child(1) { animation-delay: .08s; }
+.slide.active .stagger:nth-child(2) { animation-delay: .16s; }
+.slide.active .stagger:nth-child(3) { animation-delay: .24s; }
+.slide.active .stagger:nth-child(4) { animation-delay: .32s; }
+.slide.active .stagger:nth-child(5) { animation-delay: .40s; }
+.slide.active .stagger:nth-child(6) { animation-delay: .48s; }
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY
+═══════════════════════════════════════ */
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  animation: fadeIn .3s ease forwards;
+}
+
+.title {
+  font-size: clamp(24px, 3.5vw, 38px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  max-width: 800px;
+  margin-bottom: 14px;
+}
+
+.subtitle {
+  font-size: clamp(14px, 1.8vw, 17px);
+  color: var(--muted);
+  max-width: 680px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* ═══════════════════════════════════════
+   COVER SLIDE
+═══════════════════════════════════════ */
+.cover-badge {
+  display: inline-block;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  animation: coverReveal .5s ease .05s both;
+}
+
+.cover-title {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+  max-width: 760px;
+  margin-bottom: 16px;
+  animation: coverReveal .5s ease .15s both;
+}
+
+.cover-divider {
+  height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 0 auto 24px;
+  animation: dividerGrow .5s ease .3s both;
+}
+
+.cover-sub {
+  font-size: clamp(14px, 1.8vw, 18px);
+  color: var(--muted);
+  max-width: 620px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  animation: coverReveal .5s ease .4s both;
+}
+
+.tagline {
+  font-size: clamp(14px, 1.8vw, 20px);
+  font-weight: 600;
+  color: var(--accent-dark);
+  font-style: italic;
+  animation: coverReveal .5s ease .5s both;
+}
+
+/* ═══════════════════════════════════════
+   CARDS
+═══════════════════════════════════════ */
+.card-grid {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  max-width: 860px;
+  margin-top: 8px;
+}
+.card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  text-align: left;
+  transition: transform .2s, box-shadow .2s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.card.accent-top { border-top: 3px solid var(--accent); }
+
+.card-icon { font-size: 22px; margin-bottom: 10px; }
+.card h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+.card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ═══════════════════════════════════════
+   FEATURE ROWS
+═══════════════════════════════════════ */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.feature-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.feature-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.feature-text {
+  font-size: clamp(13px, 1.4vw, 15px);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════
+   IMAGE LAYOUT (text + image side by side)
+═══════════════════════════════════════ */
+.slide-image-layout {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+  width: 100%;
+  max-width: 960px;
+  text-align: left;
+}
+
+.text-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.img-col {
+  flex: 0 0 auto;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── 1:1 image crop ── */
+.img-square {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: #fff;
+  position: relative;
+}
+
+.img-square img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform .4s ease;
+}
+
+.img-square:hover img { transform: scale(1.03); }
+
+.img-caption {
+  font-size: 10.5px;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════
+   DUAL IMAGE (thread options)
+═══════════════════════════════════════ */
+.dual-image {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 760px;
+  margin-top: 8px;
+}
+
+.img-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.img-panel .img-square { width: 100%; max-width: 280px; }
+
+.thread-desc {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  text-align: left;
+  width: 100%;
+  max-width: 280px;
+}
+.thread-desc.accent { border-top: 3px solid var(--accent); }
+.thread-desc p:first-child { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.thread-desc p:last-child  { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+
+/* ═══════════════════════════════════════
+   INDICATION GRID
+═══════════════════════════════════════ */
+.indication-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 760px;
+  width: 100%;
+  margin-top: 12px;
+  text-align: left;
+}
+
+.indication-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: clamp(12.5px, 1.3vw, 14px);
+  color: var(--text);
+  line-height: 1.5;
+  transition: transform .2s, box-shadow .2s;
+}
+.indication-item:hover { transform: translateX(4px); box-shadow: var(--shadow); }
+
+.footnote {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 16px;
+  font-style: italic;
+  max-width: 680px;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════
+   PLATFORM CARDS
+═══════════════════════════════════════ */
+.platform-row {
+  display: flex;
+  gap: 16px;
+  max-width: 780px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.platform-card {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 20px 20px;
+  text-align: center;
+  position: relative;
+  transition: transform .2s, box-shadow .2s;
+}
+.platform-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.platform-card.primary-card { border: 2px solid var(--accent); animation: pulseAccent 2.5s ease 1s 2; }
+.platform-card .p-badge {
+  position: absolute;
+  top: -11px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent); color: #fff;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 12px; border-radius: 10px;
+}
+.platform-card h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.platform-card p  { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+/* ═══════════════════════════════════════
+   MATERIAL SLIDE
+═══════════════════════════════════════ */
+.material-hero {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  max-width: 820px;
+  width: 100%;
+  text-align: left;
+}
+
+.material-spec {
+  background: var(--dark);
+  color: var(--accent);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  flex-shrink: 0;
+  text-align: center;
+  min-width: 170px;
+}
+.mat-formula { font-size: 26px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
+.mat-name    { font-size: 10px; color: #a09890; letter-spacing: 1px; text-transform: uppercase; line-height: 1.5; }
+
+.material-points { display: flex; flex-direction: column; gap: 12px; }
+
+.mat-point { display: flex; align-items: flex-start; gap: 10px; }
+.mat-dot   { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; }
+.mat-text  { font-size: clamp(13px, 1.4vw, 15px); color: var(--text); line-height: 1.5; }
+
+/* ═══════════════════════════════════════
+   SUMMARY QUAD GRID
+═══════════════════════════════════════ */
+.quad-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 800px;
+  width: 100%;
+  margin-top: 14px;
+}
+
+.quad-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  text-align: left;
+  transition: transform .2s, box-shadow .2s;
+}
+.quad-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.q-num { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+.quad-card h3 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+.quad-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ═══════════════════════════════════════
+   BIOLOGICAL SAFETY
+═══════════════════════════════════════ */
+.bio-panel {
+  display: flex;
+  gap: 18px;
+  max-width: 820px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.bio-col {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  transition: transform .2s, box-shadow .2s;
+}
+.bio-col:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.bio-title  { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.bio-std    { font-size: 10.5px; color: var(--muted); margin-bottom: 10px; }
+.bio-result { font-size: 30px; font-weight: 800; color: #1a7a3c; margin: 8px 0 5px; }
+.bio-label  { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.bio-desc   { margin-top: 10px; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+
+/* ═══════════════════════════════════════
+   CYTOTOXICITY BARS
+═══════════════════════════════════════ */
+.cytotox-wrap {
+  width: 100%;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cytotox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.conc {
+  font-size: 11.5px;
+  color: var(--muted);
+  width: 90px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 24px;
+  background: #e8e3db;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1a6b35, #1a7a3c);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  width: 0;
+  transition: none;
+}
+
+.slide.active .bar-fill {
+  animation: barExpand .9s cubic-bezier(.25,1,.5,1) forwards;
+}
+.slide.active .bar-fill:nth-child(1) { animation-delay: .2s; }
+
+.cytotox-row:nth-child(2) .bar-fill { animation-delay: .3s !important; }
+.cytotox-row:nth-child(3) .bar-fill { animation-delay: .4s !important; }
+.cytotox-row:nth-child(4) .bar-fill { animation-delay: .5s !important; }
+
+.bar-val {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.threshold-label {
+  font-size: 11.5px;
+  color: #c0392b;
+  font-weight: 600;
+  padding-left: 102px;
+  text-align: left;
+  margin: 4px 0 10px;
+}
+
+.cytotox-conclusion {
+  font-size: 13px;
+  color: #1a7a3c;
+  font-weight: 700;
+  padding-left: 102px;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.cytotox-note {
+  font-size: 11px;
+  color: var(--muted);
+  padding-left: 102px;
+  text-align: left;
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════
+   DATA TABLE
+═══════════════════════════════════════ */
+.data-table {
+  width: 100%;
+  max-width: 660px;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+.data-table th {
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 16px;
+  text-align: left;
+  letter-spacing: .5px;
+}
+.data-table td {
+  font-size: 14px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-align: left;
+}
+.data-table tr:nth-child(even) td { background: #faf8f4; }
+.data-table .load-value { font-weight: 700; color: var(--accent-dark); }
+
+/* ═══════════════════════════════════════
+   METRIC BOXES
+═══════════════════════════════════════ */
+.metric-row {
+  display: flex;
+  gap: 14px;
+  max-width: 740px;
+  width: 100%;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.metric-box {
+  flex: 1;
+  min-width: 120px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 14px;
+  text-align: center;
+  transition: transform .2s, box-shadow .2s;
+}
+.metric-box:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.metric-number { font-size: clamp(24px, 3vw, 34px); font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+.metric-label  { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+
+/* ═══════════════════════════════════════
+   VALUE GRID (procurement)
+═══════════════════════════════════════ */
+.value-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 780px;
+  width: 100%;
+  margin-top: 14px;
+}
+
+.value-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  transition: transform .2s, box-shadow .2s;
+}
+.value-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.value-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.value-item h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.value-item p  { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+
+/* ═══════════════════════════════════════
+   CLOSING BOX
+═══════════════════════════════════════ */
+.closing-box {
+  background: var(--dark);
+  color: #f4f1ec;
+  border-radius: 14px;
+  padding: 32px 40px;
+  max-width: 700px;
+  width: 100%;
+  margin-top: 20px;
+}
+.closing-box p   { font-size: clamp(13px, 1.5vw, 16px); line-height: 1.7; color: #c8bfb3; }
+.closing-box .cta { font-size: clamp(15px, 1.8vw, 20px); font-weight: 700; color: var(--accent); margin-top: 18px; }
+
+/* ═══════════════════════════════════════
+   NAV BUTTONS
+═══════════════════════════════════════ */
+#nav-prev, #nav-next {
+  position: fixed;
+  bottom: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  z-index: 50;
+  transition: background .15s, color .15s, border-color .15s, transform .15s;
+  box-shadow: var(--shadow);
+}
+#nav-prev { left: calc(var(--sidebar-w) + 20px); }
+#nav-next { right: 20px; }
+#nav-prev:hover, #nav-next:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-1px); }
+#nav-prev:disabled, #nav-next:disabled { opacity: .35; pointer-events: none; }
+
+/* ═══════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════ */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  height: 3px;
+  background: var(--accent-light);
+  z-index: 100;
+}
+#progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width .3s ease;
+}
+
+/* ═══════════════════════════════════════
+   TABLET — 640px to 1023px
+═══════════════════════════════════════ */
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root { --sidebar-w: 52px; }
+
+  #sidebar .brand { padding: 0 0 16px; text-align: center; font-size: 10px; letter-spacing: .5px; }
 
   .chapter-btn {
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: none;
+    padding: 10px 0;
+    text-align: center;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    font-size: 10px;
+    letter-spacing: 0;
+    line-height: 1.3;
+  }
+  .chapter-btn.active { border-left: none; border-bottom-color: var(--accent); }
+
+  .slide { padding: 60px 32px 80px; }
+
+  .slide-image-layout { gap: 24px; }
+  .img-col { width: 220px; }
+
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+
+  .material-hero { gap: 24px; }
+}
+
+/* ═══════════════════════════════════════
+   MOBILE — below 640px
+═══════════════════════════════════════ */
+@media (max-width: 639px) {
+  :root { --sidebar-w: 0px; --header-h: 52px; --bottom-h: 64px; }
+
+  body { overflow-x: hidden; }
+
+  /* Show mobile header */
+  #mobile-header { display: flex; }
+
+  /* Counter hidden on mobile (shown in header) */
+  #counter { display: none; }
+
+  /* Progress bar from edge */
+  #progress-bar { left: 0; top: var(--header-h); }
+
+  /* Sidebar: drawer overlay */
+  #sidebar {
+    top: 0; left: 0;
+    width: 240px;
+    transform: translateX(-100%);
+    padding-top: 70px;
+    box-shadow: 4px 0 24px rgba(0,0,0,.2);
+  }
+  #sidebar.open { transform: translateX(0); }
+  #backdrop { display: block; }
+
+  /* Main: full width, push below header */
+  #main { margin-left: 0; padding-top: var(--header-h); }
+
+  /* Nav buttons: full-width bottom bar */
+  #nav-prev, #nav-next {
+    bottom: 0;
+    border-radius: 0;
     border: none;
-    color: var(--text-2);
-    font-size: 12px;
-    font-weight: 500;
-    padding: 9px 20px;
-    cursor: pointer;
-    transition: all 0.15s;
-    border-left: 3px solid transparent;
-    letter-spacing: 0.01em;
-    line-height: 1.4;
+    border-top: 1px solid var(--border);
+    box-shadow: none;
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+  #nav-prev { left: 0; width: 50%; border-right: 1px solid var(--border); }
+  #nav-next { right: 0; width: 50%; }
+  #nav-prev:hover, #nav-next:hover { transform: none; }
+
+  /* Slides: scrollable, full width */
+  .slide {
+    min-height: calc(100dvh - var(--header-h) - var(--bottom-h));
+    padding: 28px 16px 20px;
+    justify-content: flex-start;
   }
 
-  .chapter-btn:hover { color: var(--text); background: rgba(28,25,21,0.04); }
+  /* Typography scale */
+  .title { font-size: 22px; }
+  .subtitle { font-size: 13.5px; margin-bottom: 18px; }
 
-  .chapter-btn.active {
-    color: var(--accent);
-    border-left-color: var(--accent);
-    background: var(--accent-lt);
-    font-weight: 700;
+  /* Cover */
+  .cover-title { font-size: 26px; }
+  .cover-sub   { font-size: 13.5px; margin-bottom: 20px; }
+  .tagline     { font-size: 13px; }
+
+  /* Image layout: stack vertically */
+  .slide-image-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .img-col { width: 100%; max-width: 300px; }
+
+  /* Dual image: stack */
+  .dual-image { flex-direction: column; align-items: center; }
+  .img-panel { width: 100%; max-width: 300px; }
+  .img-panel .img-square { max-width: 100%; }
+  .thread-desc { max-width: 100%; }
+
+  /* Grids: single column */
+  .card-grid.cols-2,
+  .card-grid.cols-3,
+  .card-grid.cols-4 { grid-template-columns: 1fr; }
+
+  .indication-grid { grid-template-columns: 1fr; }
+  .quad-grid       { grid-template-columns: 1fr; }
+  .value-grid      { grid-template-columns: 1fr; }
+  .bio-panel       { flex-direction: column; }
+  .platform-row    { flex-direction: column; }
+
+  /* Material */
+  .material-hero { flex-direction: column; gap: 20px; }
+  .material-spec { min-width: unset; width: 100%; }
+
+  /* Threshold label */
+  .threshold-label, .cytotox-conclusion, .cytotox-note { padding-left: 0; }
+
+  /* Metric row */
+  .metric-row { flex-wrap: wrap; }
+  .metric-box { min-width: calc(50% - 7px); }
+
+  /* Closing */
+  .closing-box { padding: 22px 20px; }
+
+  /* Table: horizontal scroll */
+  .data-table { font-size: 12px; }
+  .data-table th, .data-table td { padding: 8px 10px; }
+}
+
+/* ═══════════════════════════════════════
+   DESKTOP — 1024px+
+═══════════════════════════════════════ */
+@media (min-width: 1024px) {
+  body { display: flex; height: 100vh; overflow: hidden; }
+
+  #mobile-header { display: none !important; }
+  #backdrop      { display: none !important; }
+
+  #sidebar {
+    position: relative;
+    top: unset; left: unset; bottom: unset;
+    flex-shrink: 0;
+    transform: none !important;
   }
 
-  /* ── Main ── */
-  #main { flex: 1; position: relative; overflow: hidden; }
+  #progress-bar { left: var(--sidebar-w); }
 
-  #counter {
-    position: absolute;
-    top: 20px;
-    right: 24px;
-    font-size: 12px;
-    color: var(--text-3);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    z-index: 20;
+  #main {
+    flex: 1;
+    margin-left: 0;
+    position: relative;
+    overflow: hidden;
+    padding-top: 0;
   }
 
-  /* ── Slides ── */
   .slide {
     position: absolute;
     inset: 0;
-    display: none;
-    flex-direction: column;
+    min-height: unset;
+    padding: 60px 64px 80px;
     justify-content: center;
-    align-items: center;
-    padding: 56px 80px 64px;
-    background: var(--bg);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-
-  .slide.active { display: flex; opacity: 1; }
-
-  .slide-standard {
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding-top: 56px;
-  }
-
-  /* ── Typography ── */
-  .slide-tag {
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 8px;
-  }
-
-  .slide-headline {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 28px;
-    line-height: 1.25;
-    max-width: 720px;
-  }
-
-  /* ── Cover ── */
-  .slide-cover {
-    background: var(--text);
-    align-items: flex-start;
-    justify-content: center;
-  }
-
-  .slide-cover::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 50%;
-    height: 100%;
-    background: radial-gradient(ellipse at 75% 50%, rgba(196,137,26,0.14) 0%, transparent 65%);
-    pointer-events: none;
-  }
-
-  .cover-eyebrow {
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 20px;
-  }
-
-  .cover-title {
-    font-size: 52px;
-    font-weight: 900;
-    line-height: 1.1;
-    color: #f4f1ec;
-    margin-bottom: 8px;
-  }
-
-  .cover-title span { color: var(--accent); }
-
-  .cover-system {
-    font-size: 18px;
-    font-weight: 600;
-    color: rgba(244,241,236,0.5);
-    margin-bottom: 36px;
-    letter-spacing: 0.03em;
-  }
-
-  .cover-line { width: 52px; height: 3px; background: var(--accent); border-radius: 2px; }
-
-  .cover-byline {
-    position: absolute;
-    bottom: 36px;
-    right: 80px;
-    font-size: 11.5px;
-    color: rgba(244,241,236,0.25);
-    font-weight: 500;
-    letter-spacing: 0.07em;
-  }
-
-  /* ── Cards ── */
-  .cards-grid { display: grid; gap: 14px; width: 100%; }
-  .g-4 { grid-template-columns: repeat(4,1fr); }
-  .g-3 { grid-template-columns: repeat(3,1fr); }
-  .g-2 { grid-template-columns: repeat(2,1fr); }
-  .g-5 { grid-template-columns: repeat(5,1fr); }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 12px;
-    padding: 20px 18px;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
-
-  .card:hover { border-color: var(--accent-bd); box-shadow: 0 2px 12px rgba(196,137,26,0.08); }
-
-  .card-icon {
-    width: 36px; height: 36px;
-    background: var(--accent-lt);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 12px;
-    font-size: 18px;
-  }
-
-  .card-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 5px;
-  }
-
-  .card-title { font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-  .card-body { font-size: 12.5px; color: var(--text-2); line-height: 1.6; }
-
-  /* ── Two-col ── */
-  .two-col { display: flex; gap: 20px; width: 100%; }
-
-  /* ── Spec block ── */
-  .spec-block {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 14px;
-    padding: 28px;
-    flex: 1;
-    position: relative;
     overflow: hidden;
   }
-
-  .spec-block::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), rgba(196,137,26,0.3));
-  }
-
-  .spec-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 6px;
-  }
-
-  .spec-value {
-    font-size: 36px;
-    font-weight: 900;
-    color: var(--text);
-    line-height: 1;
-    margin-bottom: 4px;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .spec-unit {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-2);
-  }
-
-  .spec-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.55; margin-top: 12px; }
-
-  .spec-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-
-  .spec-tag {
-    background: var(--accent-lt);
-    border: 1px solid var(--accent-bd);
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 4px;
-  }
-
-  /* ── Component diagram ── */
-  .component-diagram {
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-
-  .comp-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-  }
-
-  .comp-shape {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .comp-arrow {
-    font-size: 20px;
-    color: var(--text-3);
-    align-self: center;
-    margin-bottom: 32px;
-  }
-
-  .comp-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text);
-    text-align: center;
-    margin-top: 4px;
-  }
-
-  .comp-sub {
-    font-size: 11px;
-    color: var(--text-2);
-    text-align: center;
-    line-height: 1.4;
-  }
-
-  /* Screw shaft visual */
-  .shape-screw {
-    width: 28px;
-    height: 80px;
-    background: linear-gradient(180deg, #b0a090 0%, #8a7868 100%);
-    border-radius: 3px 3px 2px 2px;
-    position: relative;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
-  }
-
-  .shape-screw::before {
-    content: '';
-    position: absolute;
-    top: 10px; left: -3px; right: -3px;
-    height: 60px;
-    background: repeating-linear-gradient(
-      180deg,
-      transparent 0px,
-      transparent 5px,
-      rgba(255,255,255,0.25) 5px,
-      rgba(255,255,255,0.25) 6px
-    );
-  }
-
-  /* Head visual */
-  .shape-head {
-    width: 44px;
-    height: 32px;
-    background: linear-gradient(180deg, #c4b8a8 0%, #a09080 100%);
-    border-radius: 6px;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 4px;
-  }
-
-  .shape-head-slot {
-    width: 28px;
-    height: 16px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 2px;
-  }
-
-  /* Rod visual */
-  .shape-rod {
-    width: 120px;
-    height: 16px;
-    background: linear-gradient(180deg, #d4c8b4 0%, #b0a090 50%, #c8bc a8 100%);
-    border-radius: 8px;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
-    background: linear-gradient(180deg, #d0c4b0 0%, #a89880 50%, #bdb0a0 100%);
-  }
-
-  /* Nut visual */
-  .shape-nut {
-    width: 32px;
-    height: 18px;
-    background: linear-gradient(180deg, #c0b4a0 0%, #9a8e7e 100%);
-    border-radius: 4px;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.12);
-    clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
-  }
-
-  /* ── Rod length scale ── */
-  .rod-scale {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .rod-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .rod-size-label {
-    width: 48px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-2);
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .rod-bar-track {
-    flex: 1;
-    height: 16px;
-    background: rgba(28,25,21,0.06);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .rod-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), rgba(196,137,26,0.5));
-    border-radius: 8px;
-    transition: width 0.3s;
-  }
-
-  .rod-bar-note {
-    font-size: 11.5px;
-    color: var(--text-2);
-    width: 60px;
-    flex-shrink: 0;
-  }
-
-  /* ── Diameter cards ── */
-  .diam-card {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 12px;
-    padding: 22px 18px;
-    flex: 1;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .diam-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--accent);
-    opacity: 0.3;
-  }
-
-  .diam-num {
-    font-size: 38px;
-    font-weight: 900;
-    color: var(--accent);
-    line-height: 1;
-    margin-bottom: 2px;
-  }
-
-  .diam-unit { font-size: 16px; font-weight: 500; color: var(--text-2); }
-
-  .diam-range {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin: 10px 0 4px;
-  }
-
-  .diam-sizes { font-size: 11.5px; color: var(--text-2); }
-
-  .diam-zone {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-2);
-    margin-top: 10px;
-    padding: 4px 8px;
-    background: var(--accent-lt);
-    border-radius: 4px;
-    display: inline-block;
-  }
-
-  /* ── Comparison table ── */
-  .comp-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    background: var(--card);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--card-bd);
-  }
-
-  .comp-table th {
-    padding: 14px 20px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-bottom: 2px solid var(--border);
-    background: var(--bg);
-  }
-
-  .comp-table th:nth-child(2) { color: var(--accent); }
-  .comp-table th:nth-child(3) { color: var(--text-2); }
-
-  .comp-table td {
-    padding: 12px 20px;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border-lt);
-    vertical-align: middle;
-  }
-
-  .comp-table td:first-child { color: var(--text-2); font-weight: 600; font-size: 12px; }
-  .comp-table td:nth-child(2) { color: var(--text); font-weight: 600; }
-  .comp-table td:nth-child(3) { color: var(--text-2); }
-
-  .comp-table tr:last-child td { border-bottom: none; }
-
-  /* ── Thread visual ── */
-  .thread-compare {
-    display: flex;
-    gap: 24px;
-    width: 100%;
-  }
-
-  .thread-card {
-    flex: 1;
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 14px;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .thread-visual {
-    width: 80px;
-    height: 120px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .thread-shaft {
-    width: 24px;
-    height: 100%;
-    background: linear-gradient(180deg, #c0b4a0 0%, #a09080 100%);
-    border-radius: 3px;
-    position: relative;
-    overflow: visible;
-  }
-
-  .thread-single {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      180deg,
-      transparent 0px,
-      transparent 7px,
-      rgba(255,255,255,0.35) 7px,
-      rgba(255,255,255,0.35) 9px
-    );
-  }
-
-  .thread-double {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      180deg,
-      transparent 0px,
-      transparent 3px,
-      rgba(255,255,255,0.3) 3px,
-      rgba(255,255,255,0.3) 4.5px,
-      transparent 4.5px,
-      transparent 7px,
-      rgba(255,255,255,0.45) 7px,
-      rgba(255,255,255,0.45) 8.5px
-    );
-  }
-
-  .thread-title { font-size: 16px; font-weight: 800; color: var(--text); }
-  .thread-desc { font-size: 12.5px; color: var(--text-2); text-align: center; line-height: 1.6; }
-  .thread-use { font-size: 12px; font-weight: 700; color: var(--accent); }
-
-  /* ── Head config cards ── */
-  .head-config {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-  }
-
-  .head-card {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 12px;
-    padding: 22px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .head-visual {
-    width: 48px;
-    height: 56px;
-    position: relative;
-    margin-bottom: 4px;
-  }
-
-  /* Monoaxial screw visual */
-  .hv-mono {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hv-head-box {
-    width: 32px;
-    height: 18px;
-    background: var(--accent);
-    border-radius: 4px;
-    opacity: 0.8;
-  }
-
-  .hv-shaft {
-    width: 10px;
-    height: 32px;
-    background: linear-gradient(180deg, var(--accent) 0%, rgba(196,137,26,0.5) 100%);
-    border-radius: 0 0 2px 2px;
-  }
-
-  .hv-poly-ring {
-    width: 36px;
-    height: 22px;
-    border: 3px solid var(--accent);
-    border-radius: 50%;
-    opacity: 0.8;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hv-poly-ring::before {
-    content: '';
-    width: 16px;
-    height: 16px;
-    background: rgba(196,137,26,0.3);
-    border-radius: 50%;
-  }
-
-  .head-type {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-
-  .head-name { font-size: 15px; font-weight: 800; color: var(--text); }
-
-  .head-desc { font-size: 12px; color: var(--text-2); line-height: 1.55; }
-
-  .head-sizes {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-3);
-    border-top: 1px solid var(--border-lt);
-    padding-top: 8px;
-    margin-top: 2px;
-  }
-
-  /* ── Detail head slide ── */
-  .detail-hero {
-    width: 100%;
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
-  }
-
-  .detail-visual {
-    width: 200px;
-    min-width: 200px;
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 16px;
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .detail-screw-art {
-    width: 60px;
-    height: 120px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .dsa-head {
-    width: 44px;
-    height: 28px;
-    background: linear-gradient(180deg, var(--accent) 0%, rgba(196,137,26,0.7) 100%);
-    border-radius: 5px;
-    position: relative;
-  }
-
-  .dsa-head::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 32px;
-    height: 4px;
-    background: rgba(196,137,26,0.6);
-  }
-
-  .dsa-shaft {
-    width: 14px;
-    height: 80px;
-    background: linear-gradient(180deg, #a89880 0%, #8a7868 100%);
-    border-radius: 0 0 2px 2px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .dsa-shaft::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      180deg,
-      transparent 0, transparent 5px,
-      rgba(255,255,255,0.2) 5px, rgba(255,255,255,0.2) 6.5px
-    );
-  }
-
-  .detail-info { flex: 1; }
-
-  .detail-tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: var(--accent-lt);
-    border: 1px solid var(--accent-bd);
-    padding: 3px 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
-  }
-
-  .detail-name { font-size: 30px; font-weight: 900; color: var(--text); margin-bottom: 8px; }
-
-  .detail-lead {
-    font-size: 15px;
-    color: var(--text-2);
-    line-height: 1.6;
-    max-width: 520px;
-    margin-bottom: 20px;
-  }
-
-  .detail-points { list-style: none; }
-
-  .detail-points li {
-    font-size: 13px;
-    color: var(--text-2);
-    padding: 7px 0 7px 18px;
-    position: relative;
-    border-bottom: 1px solid var(--border-lt);
-    line-height: 1.4;
-  }
-
-  .detail-points li:last-child { border-bottom: none; }
-
-  .detail-points li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--accent);
-    font-size: 11px;
-    top: 9px;
-  }
-
-  .detail-sizes {
-    margin-top: 18px;
-    padding: 14px 16px;
-    background: var(--accent-lt);
-    border: 1px solid var(--accent-bd);
-    border-radius: 8px;
-  }
-
-  .detail-sizes-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 6px;
-  }
-
-  .detail-sizes-val {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.6;
-  }
-
-  /* ── Material card ── */
-  .material-block {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 14px;
-    padding: 32px;
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .material-block::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), rgba(196,137,26,0.3));
-  }
-
-  .mat-symbol {
-    font-size: 56px;
-    font-weight: 900;
-    color: rgba(196,137,26,0.18);
-    line-height: 1;
-    margin-bottom: 6px;
-    font-family: monospace;
-  }
-
-  .mat-name { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
-  .mat-full { font-size: 13px; color: var(--text-2); margin-bottom: 16px; line-height: 1.4; }
-
-  .mat-std {
-    display: inline-block;
-    background: var(--accent-lt);
-    border: 1px solid var(--accent-bd);
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 4px;
-    margin-bottom: 18px;
-    font-family: monospace;
-  }
-
-  .mat-props { list-style: none; }
-
-  .mat-props li {
-    font-size: 13px;
-    color: var(--text-2);
-    padding: 5px 0 5px 18px;
-    position: relative;
-    border-bottom: 1px solid var(--border-lt);
-  }
-
-  .mat-props li:last-child { border-bottom: none; }
-
-  .mat-props li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 7px; }
-
-  /* ── Cert cards ── */
-  .cert-card {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 14px;
-    padding: 26px 28px;
-    flex: 1;
-  }
-
-  .cert-badge {
-    display: inline-block;
-    background: var(--accent-lt);
-    border: 1px solid var(--accent-bd);
-    color: var(--accent);
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 3px 11px;
-    border-radius: 20px;
-    margin-bottom: 12px;
-  }
-
-  .cert-name { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
-  .cert-by { font-size: 12.5px; color: var(--text-2); margin-bottom: 16px; }
-
-  .cert-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
-
-  .cert-item label {
-    display: block;
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-3);
-    margin-bottom: 3px;
-  }
-
-  .cert-item span { font-size: 12.5px; font-weight: 700; color: var(--text); }
-
-  .cert-list { list-style: none; margin-top: 14px; }
-
-  .cert-list li {
-    font-size: 12px;
-    color: var(--text-2);
-    padding: 3.5px 0 3.5px 14px;
-    position: relative;
-    line-height: 1.4;
-  }
-
-  .cert-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 9px; top: 6px; }
-
-  /* ── Summary statements ── */
-  .statements { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-
-  .stmt-row {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 14px 22px;
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 11px;
-    border-left: 3px solid var(--accent);
-    transition: box-shadow 0.15s;
-  }
-
-  .stmt-row:hover { box-shadow: 0 2px 10px rgba(196,137,26,0.1); }
-
-  .stmt-num { font-size: 20px; font-weight: 900; color: rgba(196,137,26,0.28); min-width: 30px; }
-  .stmt-text { font-size: 15px; font-weight: 600; color: var(--text); }
-
-  /* ── Contact ── */
-  .contact-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; width: 100%; }
-
-  .contact-block {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 11px;
-    padding: 18px 22px;
-  }
-
-  .contact-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 7px;
-  }
-
-  .contact-value { font-size: 13.5px; font-weight: 600; color: var(--text); line-height: 1.55; }
-  .contact-value.mono { font-family: monospace; font-size: 13px; }
-  .contact-muted { color: var(--text-2); font-size: 12.5px; font-weight: 400; }
-
-  /* ── Emerald T screw visual ── */
-  .staple-visual {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .staple-head {
-    width: 40px;
-    height: 20px;
-    background: linear-gradient(180deg, #c0b4a0 0%, #a09080 100%);
-    border-radius: 3px;
-    position: relative;
-  }
-
-  .staple-tine {
-    display: flex;
-    gap: 12px;
-  }
-
-  .staple-tine-bar {
-    width: 8px;
-    height: 16px;
-    background: linear-gradient(180deg, #a09080 0%, #8a7868 100%);
-    border-radius: 0 0 2px 2px;
-  }
-
-  /* ── Info bar ── */
-  .info-bar {
-    padding: 14px 20px;
-    background: var(--accent-lt);
-    border: 1px solid var(--accent-bd);
-    border-radius: 10px;
-    width: 100%;
-  }
-
-  .info-bar-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-3);
-    margin-bottom: 3px;
-  }
-
-  .info-bar-value { font-size: 15px; font-weight: 700; color: var(--text); }
-  .info-bar-value span { color: var(--accent); }
-
-  /* ── Scope list ── */
-  .scope-list { list-style: none; }
-
-  .scope-list li {
-    font-size: 13px;
-    color: var(--text-2);
-    padding: 7px 0 7px 18px;
-    position: relative;
-    border-bottom: 1px solid var(--border-lt);
-    line-height: 1.4;
-  }
-
-  .scope-list li:last-child { border-bottom: none; }
-  .scope-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 9px; top: 10px; }
-
-  /* ── Indication grid ── */
-  .indication-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; width: 100%; }
-
-  .indication-card {
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 12px;
-    padding: 18px 14px;
-    text-align: center;
-    transition: border-color 0.15s;
-  }
-
-  .indication-card:hover { border-color: var(--accent-bd); }
-
-  .indication-icon { font-size: 28px; margin-bottom: 10px; }
-  .indication-name { font-size: 13px; font-weight: 700; color: var(--text); }
-  .indication-desc { font-size: 11.5px; color: var(--text-2); margin-top: 4px; line-height: 1.4; }
-
-  /* ── Spine anatomy visual ── */
-  .spine-visual {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    padding: 20px;
-    background: var(--card);
-    border: 1px solid var(--card-bd);
-    border-radius: 14px;
-    min-width: 140px;
-  }
-
-  .spine-zone-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-3);
-    margin-bottom: 4px;
-    margin-top: 6px;
-    align-self: flex-start;
-    padding-left: 4px;
-  }
-
-  .vertebra {
-    width: 48px;
-    height: 10px;
-    background: linear-gradient(90deg, #c0b4a0 0%, #b0a490 100%);
-    border-radius: 3px;
-    position: relative;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
-
-  .vertebra.thoracic { background: linear-gradient(90deg, #b8ac9c 0%, #a89c8c 100%); width: 38px; }
-  .vertebra.lumbar   { background: linear-gradient(90deg, var(--accent) 0%, rgba(196,137,26,0.7) 100%); width: 54px; }
-  .vertebra.sacral   { background: linear-gradient(90deg, rgba(196,137,26,0.5) 0%, rgba(196,137,26,0.3) 100%); width: 44px; border-radius: 3px 3px 6px 6px; }
-
-  .disc {
-    width: 34px;
-    height: 5px;
-    background: rgba(28,25,21,0.08);
-    border-radius: 2px;
-  }
-
-  .disc.thoracic { width: 30px; }
-  .disc.lumbar   { width: 42px; }
-
-  /* ── Nav ── */
-  #nav-prev, #nav-next {
-    position: absolute;
-    bottom: 22px;
-    width: 38px; height: 38px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-2);
-    font-size: 15px;
-    transition: all 0.15s;
-    z-index: 20;
-    user-select: none;
-  }
-
-  #nav-prev { right: 76px; }
-  #nav-next { right: 28px; }
-
-  #nav-prev:hover, #nav-next:hover {
-    background: var(--accent-lt);
-    border-color: var(--accent-bd);
-    color: var(--accent);
-  }
+}
 </style>
 </head>
 <body>
 
-<!-- ════════════════════════════
-     SIDEBAR
-════════════════════════════ -->
+<!-- ── Mobile header ── -->
+<header id="mobile-header">
+  <button id="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div id="mobile-brand">Emerald</div>
+  <span id="mobile-counter">1 / 20</span>
+</header>
+
+<!-- ── Backdrop ── -->
+<div id="backdrop" onclick="closeSidebar()"></div>
+
+<!-- ── Sidebar ── -->
 <nav id="sidebar">
-  <div class="sidebar-logo">
-    <span class="sidebar-brand">Emerald Pedicle System</span>
-    <span class="sidebar-sub">Pengetahuan Produk</span>
-  </div>
-  <button class="chapter-btn active" onclick="jumpToChapter(0)">Pembuka</button>
-  <button class="chapter-btn" onclick="jumpToChapter(1)">Konteks Klinis</button>
-  <button class="chapter-btn" onclick="jumpToChapter(2)">Gambaran Sistem</button>
-  <button class="chapter-btn" onclick="jumpToChapter(3)">Komponen</button>
-  <button class="chapter-btn" onclick="jumpToChapter(4)">Konfigurasi Kepala</button>
-  <button class="chapter-btn" onclick="jumpToChapter(5)">Rentang Ukuran</button>
-  <button class="chapter-btn" onclick="jumpToChapter(6)">Emerald T &amp; VBT</button>
-  <button class="chapter-btn" onclick="jumpToChapter(7)">Material &amp; Kualitas</button>
-  <button class="chapter-btn" onclick="jumpToChapter(8)">Inovasi Spine</button>
-  <button class="chapter-btn" onclick="jumpToChapter(9)">Ringkasan</button>
+  <div class="brand">Emerald</div>
+  <button class="chapter-btn active" onclick="jumpChapter(0)">Pembuka</button>
+  <button class="chapter-btn" onclick="jumpChapter(1)">Konteks &amp; Sistem</button>
+  <button class="chapter-btn" onclick="jumpChapter(2)">Indikasi Klinis</button>
+  <button class="chapter-btn" onclick="jumpChapter(3)">Platform &amp; Material</button>
+  <button class="chapter-btn" onclick="jumpChapter(4)">Fitur Utama</button>
+  <button class="chapter-btn" onclick="jumpChapter(5)">Ringkasan Fitur</button>
+  <button class="chapter-btn" onclick="jumpChapter(6)">Biological Safety</button>
+  <button class="chapter-btn" onclick="jumpChapter(7)">Mechanical Evidence</button>
+  <button class="chapter-btn" onclick="jumpChapter(8)">Nilai Pengadaan</button>
 </nav>
 
-<!-- ════════════════════════════
-     MAIN
-════════════════════════════ -->
-<main id="main">
-  <div id="counter">1 / 23</div>
+<!-- ── Progress bar ── -->
+<div id="progress-bar"><div id="progress-fill" style="width:5%"></div></div>
 
-  <!-- ───────────────────────────────────────
-       01 — COVER
-  ─────────────────────────────────────── -->
-  <section class="slide slide-cover active" data-chapter="0">
-    <div class="cover-eyebrow">Pengetahuan Produk &middot; Fiksasi Tulang Belakang</div>
-    <h1 class="cover-title"><span>Emerald</span><br>Pedicle System</h1>
-    <div class="cover-system">Thoracolumbosacral Pedicle Screw System</div>
-    <div class="cover-line"></div>
-    <div class="cover-byline">PT Trafas Dwi Medika &middot; 2026</div>
+<!-- ── Main ── -->
+<div id="main">
+  <div id="counter">1 / 20</div>
+
+  <!-- ══════════════════
+       SLIDE 1 — Cover
+  ══════════════════ -->
+  <section class="slide active" data-chapter="0">
+    <div class="cover-badge">Hospital Procurement Pitch</div>
+    <h1 class="cover-title">Mulai dari Kebutuhan,<br>Bukan dari Harga</h1>
+    <div class="cover-divider"></div>
+    <p class="cover-sub">
+      Pedicle Screw System yang cost-effective, fleksibel secara konfigurasi,
+      dan didukung oleh biological safety screening serta initial mechanical evidence
+      yang relevan untuk evaluasi rumah sakit.
+    </p>
+    <p class="tagline">Sistem · Fitur · Evidence · Nilai Pengadaan</p>
   </section>
 
-  <!-- ───────────────────────────────────────
-       02 — SPINE & FIXATION NEED
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="1">
-    <div class="slide-tag">Konteks Klinis</div>
-    <div class="slide-headline">Kondisi tulang belakang memerlukan fiksasi stabil jangka panjang untuk memulihkan keselarasan</div>
-    <div class="two-col">
-      <div class="spine-visual">
-        <div class="spine-zone-label">Toraks (T1–T12)</div>
-        <div class="vertebra thoracic"></div><div class="disc thoracic"></div>
-        <div class="vertebra thoracic"></div><div class="disc thoracic"></div>
-        <div class="vertebra thoracic"></div><div class="disc thoracic"></div>
-        <div class="vertebra thoracic"></div><div class="disc thoracic"></div>
-        <div class="vertebra thoracic"></div>
-        <div class="spine-zone-label">Lumbal (L1–L5)</div>
-        <div class="vertebra lumbar"></div><div class="disc lumbar"></div>
-        <div class="vertebra lumbar"></div><div class="disc lumbar"></div>
-        <div class="vertebra lumbar"></div><div class="disc lumbar"></div>
-        <div class="vertebra lumbar"></div><div class="disc lumbar"></div>
-        <div class="vertebra lumbar"></div>
-        <div class="spine-zone-label">Sakrum</div>
-        <div class="vertebra sacral"></div>
+  <!-- ══════════════════
+       SLIDE 2 — Intended Use
+  ══════════════════ -->
+  <section class="slide" data-chapter="1">
+    <div class="label">Konteks &amp; Sistem</div>
+    <h2 class="title">Tetapkan Intended Use<br>Sistem Secara Jelas</h2>
+    <p class="subtitle">Evaluasi produk yang objektif dimulai dari memahami fungsi klinisnya.</p>
+    <div class="card-grid cols-2" style="max-width:720px;">
+      <div class="card accent-top stagger">
+        <div class="card-icon">🎯</div>
+        <h3>Fungsi Utama</h3>
+        <p>Stabilisasi dan fiksasi spinal posterior menggunakan konstruksi screw, rod, dan locking mechanism.</p>
       </div>
-      <div style="flex:1; display:flex; flex-direction:column; gap:12px; justify-content:center;">
-        <div class="card">
-          <div class="card-label">Mengapa Fiksasi</div>
-          <div class="card-title">Tulang saja tidak dapat menstabilkan tulang belakang yang terganggu</div>
-          <div class="card-body">Fiksasi implan menahan vertebra pada keselarasan yang benar sementara fusi tulang terjadi — umumnya dalam 3–6 bulan pasca operasi.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Pendekatan Pedicle Screw</div>
-          <div class="card-title">Pedicle screw memberikan cengkeraman terkuat pada tulang vertebra</div>
-          <div class="card-body">Dipasang melalui pedikel ke dalam badan vertebra. Dihubungkan oleh rod untuk membentuk konstruk rigid atau semi-rigid di satu atau lebih level tulang belakang.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Area Target</div>
-          <div class="card-title">Torakolumbosacral — dari T1 hingga sakrum</div>
-          <div class="card-body">Sistem Emerald dirancang dan disertifikasi untuk fiksasi di seluruh area ini.</div>
-        </div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">🔗</div>
+        <h3>Sistem, Bukan Item</h3>
+        <p>Yang dievaluasi bukan satu screw tunggal, melainkan bagaimana seluruh komponen bekerja sebagai konstruksi.</p>
+      </div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">📋</div>
+        <h3>Dasar Evaluasi</h3>
+        <p>Intended use yang jelas membuat diskusi procurement lebih terarah dan lebih objektif.</p>
+      </div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">✅</div>
+        <h3>Relevan untuk Rumah Sakit</h3>
+        <p>Produk ini dirancang untuk memenuhi kebutuhan stabilisasi spinal posterior dalam konteks klinis terstruktur.</p>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       03 — CLINICAL INDICATIONS
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="1">
-    <div class="slide-tag">Konteks Klinis</div>
-    <div class="slide-headline">Lima indikasi utama fiksasi torakolumbosacral</div>
+  <!-- ══════════════════
+       SLIDE 3 — System Architecture
+  ══════════════════ -->
+  <section class="slide" data-chapter="1">
+    <div class="label">Arsitektur Sistem</div>
+    <h2 class="title">Produk Ini Adalah<br>Sebuah System</h2>
+    <div class="slide-image-layout">
+      <div class="text-col">
+        <p class="subtitle" style="font-size:14px; margin-bottom:16px;">
+          Nilai sistem terletak pada integrasi komponen, bukan pada komponen tunggal.
+        </p>
+        <div class="feature-list">
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Pedicle screw sebagai elemen fixation</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Rod sebagai connector konstruksi</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Set screw sebagai locking component</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Kompatibilitas antar komponen menentukan usability</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Evaluasi rumah sakit perlu melihat keseluruhan konstruksi</div></div>
+        </div>
+      </div>
+      <div class="img-col">
+        <div class="img-square stagger">
+          <img src="../../assets/images/emerald-pedicle-screw-system-content-pack/exploded-pedicle-system-view.jpeg"
+               alt="Exploded pedicle system view" loading="lazy">
+        </div>
+        <p class="img-caption">Exploded view of pedicle screw system showing main assembly components</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 4 — Degenerative
+  ══════════════════ -->
+  <section class="slide" data-chapter="2">
+    <div class="label">Indikasi Klinis · Kelompok 1</div>
+    <h2 class="title">Degenerative Disorders</h2>
+    <p class="subtitle">Kondisi degeneratif dengan kebutuhan stabilisasi yang jelas dan terstruktur.</p>
     <div class="indication-grid">
-      <div class="indication-card">
-        <div class="indication-icon">🔗</div>
-        <div class="indication-name">Fusi Tulang Belakang</div>
-        <div class="indication-desc">Menghubungkan dua atau lebih vertebra untuk menghilangkan gerakan yang menimbulkan nyeri</div>
+      <div class="indication-item stagger">Degenerative disc disease dengan instabilitas</div>
+      <div class="indication-item stagger">Spinal stenosis yang memerlukan stabilisasi</div>
+      <div class="indication-item stagger">Degenerative spondylolisthesis</div>
+      <div class="indication-item stagger">Kondisi degeneratif lain yang membutuhkan fiksasi sesuai evaluasi klinis</div>
+    </div>
+    <p class="footnote">* Indikasi final mengacu pada IFU, labeling, dan dokumen registrasi produk yang berlaku.</p>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 5 — Deformities
+  ══════════════════ -->
+  <section class="slide" data-chapter="2">
+    <div class="label">Indikasi Klinis · Kelompok 2</div>
+    <h2 class="title">Deformities</h2>
+    <p class="subtitle">Sistem berperan sebagai bagian dari konstruksi koreksi dan maintenance alignment.</p>
+    <div class="indication-grid">
+      <div class="indication-item stagger">Scoliosis</div>
+      <div class="indication-item stagger">Kyphosis</div>
+      <div class="indication-item stagger">Adult spinal deformity</div>
+      <div class="indication-item stagger">Coronal dan sagittal imbalance yang memerlukan koreksi dan stabilisasi</div>
+    </div>
+    <p class="footnote">* Indikasi final mengacu pada IFU, labeling, dan dokumen registrasi produk yang berlaku.</p>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 6 — Structural
+  ══════════════════ -->
+  <section class="slide" data-chapter="2">
+    <div class="label">Indikasi Klinis · Kelompok 3</div>
+    <h2 class="title">Kondisi Struktural Lain</h2>
+    <p class="subtitle">Klasifikasi terpisah agar pembacaan indikasi tetap akurat dan kontekstual.</p>
+    <div class="indication-grid">
+      <div class="indication-item stagger">Trauma</div>
+      <div class="indication-item stagger">Tumor</div>
+      <div class="indication-item stagger">Infection</div>
+      <div class="indication-item stagger">Kondisi struktural lain yang membutuhkan stabilisasi spinal sesuai evaluasi klinis</div>
+    </div>
+    <p class="footnote">* Indikasi final mengacu pada IFU, labeling, dan dokumen registrasi produk yang berlaku.</p>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 7 — Platform Breadth
+  ══════════════════ -->
+  <section class="slide" data-chapter="3">
+    <div class="label">Platform &amp; Material</div>
+    <h2 class="title">Platform Produk<br>yang Berkembang</h2>
+    <p class="subtitle">Rumah sakit tidak hanya membeli satu produk, tetapi menjalin kerja sama dengan platform sistem.</p>
+    <div class="platform-row">
+      <div class="platform-card primary-card stagger">
+        <div class="p-badge">Saat ini</div>
+        <h3>Posterior Fixation<br>Pedicle Screw System</h3>
+        <p>Tersedia dalam opsi single-threaded dan double-threaded. Sistem fixation spinal posterior yang lengkap.</p>
       </div>
-      <div class="indication-card">
-        <div class="indication-icon">〰️</div>
-        <div class="indication-name">Koreksi Skoliosis</div>
-        <div class="indication-desc">Mengoreksi deformitas lateral dan rotasional tulang belakang</div>
+      <div class="platform-card stagger">
+        <h3>VBT Platform<br>Extension</h3>
+        <p>Platform pedicle screw system untuk Vertebral Body Tethering — menunjukkan pengembangan lini sistem ke depan.</p>
       </div>
-      <div class="indication-card">
-        <div class="indication-icon">💥</div>
-        <div class="indication-name">Stabilisasi Fraktur</div>
-        <div class="indication-desc">Menstabilkan fraktur vertebra akibat trauma atau patologi</div>
+    </div>
+    <p style="font-size:13px; color:var(--muted); margin-top:22px; max-width:660px; line-height:1.6;" class="stagger">
+      Platform yang berkembang menunjukkan bahwa kerja sama yang dibangun tidak berhenti pada satu produk dasar saja.
+    </p>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 8 — Material
+  ══════════════════ -->
+  <section class="slide" data-chapter="3">
+    <div class="label">Material Dasar Sistem</div>
+    <h2 class="title">Ti-6Al-4V ELI<br>sebagai Material Utama</h2>
+    <div class="material-hero">
+      <div class="material-spec stagger">
+        <div class="mat-formula">Ti-6Al-4V<br>ELI</div>
+        <div class="mat-name">Titanium Alloy<br>Extra Low Interstitials</div>
       </div>
-      <div class="indication-card">
-        <div class="indication-icon">🦴</div>
-        <div class="indication-name">Penyakit Degeneratif</div>
-        <div class="indication-desc">Penanganan penyakit diskus, stenosis, dan spondilolistesis</div>
-      </div>
-      <div class="indication-card">
-        <div class="indication-icon">🔄</div>
-        <div class="indication-name">Operasi Revisi</div>
-        <div class="indication-desc">Memulihkan stabilitas pada kasus implan sebelumnya yang gagal</div>
+      <div class="material-points">
+        <div class="mat-point stagger"><div class="mat-dot"></div><div class="mat-text">Material utama sistem adalah Ti-6Al-4V ELI — paduan titanium grade implant</div></div>
+        <div class="mat-point stagger"><div class="mat-dot"></div><div class="mat-text">Material implant harus dinilai dari aspek safety dan performance</div></div>
+        <div class="mat-point stagger"><div class="mat-dot"></div><div class="mat-text">Pemilihan material berkaitan langsung dengan evaluasi biologis</div></div>
+        <div class="mat-point stagger"><div class="mat-dot"></div><div class="mat-text">Material menjadi dasar untuk membaca evidence produk</div></div>
+        <div class="mat-point stagger"><div class="mat-dot"></div><div class="mat-text">Menjawab dua pertanyaan utama: aman atau tidak, dan cukup andal atau tidak</div></div>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       04 — SYSTEM OVERVIEW
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="2">
-    <div class="slide-tag">Gambaran Sistem</div>
-    <div class="slide-headline">Sistem pedicle screw modular yang komprehensif untuk fiksasi torakolumbosacral</div>
-    <div class="cards-grid g-4">
-      <div class="card">
-        <div class="card-icon">🔧</div>
-        <div class="card-label">Desain</div>
-        <div class="card-title">Arsitektur Modular</div>
-        <div class="card-body">Komponen screw, kepala, dan rod yang terpisah memungkinkan fleksibilitas intraoperatif dan konfigurasi yang dapat disesuaikan</div>
+  <!-- ══════════════════
+       SLIDE 9 — Polyaxial Head
+  ══════════════════ -->
+  <section class="slide" data-chapter="4">
+    <div class="label">Fitur Utama · Polyaxial Head</div>
+    <h2 class="title">Polyaxial Screw Head<br>untuk Fleksibilitas Alignment</h2>
+    <div class="slide-image-layout">
+      <div class="text-col">
+        <div class="feature-list">
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Low head profile — mengurangi implant prominence</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Top loading untuk introduksi rod yang lebih mudah</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Polyaxial angulation hingga 60° total (30° tiap sisi)</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Membantu alignment pada area dengan ruang terbatas</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Memberikan fleksibilitas saat pembentukan konstruksi</div></div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-icon">🎛️</div>
-        <div class="card-label">Konfigurasi</div>
-        <div class="card-title">4 Tipe Kepala</div>
-        <div class="card-body">Monoaxial, Polyaxial, Long Arm, dan Reduction — satu sistem untuk semua skenario bedah</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">📐</div>
-        <div class="card-label">Rentang Ukuran</div>
-        <div class="card-title">Diameter 4,5 – 7,5mm</div>
-        <div class="card-body">Sembilan panjang per diameter. Panjang rod 40–600mm. Cakupan anatomi penuh dari toraks hingga sakral</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">⚗️</div>
-        <div class="card-label">Material</div>
-        <div class="card-title">Ti-6Al-4V ELI</div>
-        <div class="card-body">Titanium implant-grade pada seluruh komponen — biokompatibilitas superior dan keandalan jangka panjang</div>
+      <div class="img-col">
+        <div class="img-square stagger">
+          <img src="../../assets/images/emerald-pedicle-screw-system-content-pack/polyaxial-pedicle-screw-angle-view.jpg"
+               alt="Polyaxial pedicle screw angle view" loading="lazy">
+        </div>
+        <p class="img-caption">Polyaxial angulation up to 60° total range (30° each side)</p>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       05 — HOW IT CONNECTS
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="2">
-    <div class="slide-tag">Gambaran Sistem</div>
-    <div class="slide-headline">Tiga komponen yang saling terhubung membentuk konstruk lengkap</div>
-    <div style="width:100%; display:flex; flex-direction:column; gap:20px;">
-      <div style="display:flex; gap:16px; align-items:stretch; width:100%;">
-        <div class="card" style="flex:1; text-align:center;">
-          <div style="font-size:42px; margin-bottom:12px;">🔩</div>
-          <div class="card-label">Langkah 1</div>
-          <div class="card-title">Pedicle Screw</div>
-          <div class="card-body">Dipasang melalui pedikel ke dalam badan vertebra. Tersedia dalam 4 diameter, 9 panjang.</div>
-        </div>
-        <div style="display:flex; align-items:center; font-size:22px; color:var(--text-3); padding:0 4px;">+</div>
-        <div class="card" style="flex:1; text-align:center;">
-          <div style="font-size:42px; margin-bottom:12px;">🔗</div>
-          <div class="card-label">Langkah 2</div>
-          <div class="card-title">Kepala Screw</div>
-          <div class="card-body">Terpasang pada screw. Tersedia dalam 4 tipe kepala — menentukan cara rod terhubung ke screw.</div>
-        </div>
-        <div style="display:flex; align-items:center; font-size:22px; color:var(--text-3); padding:0 4px;">+</div>
-        <div class="card" style="flex:1; text-align:center;">
-          <div style="font-size:42px; margin-bottom:12px;">➖</div>
-          <div class="card-label">Langkah 3</div>
-          <div class="card-title">Rod Penghubung</div>
-          <div class="card-body">Rod titanium 6mm. Melewati kepala screw untuk menghubungkan beberapa level. 40–600mm dalam 23 ukuran.</div>
-        </div>
-        <div style="display:flex; align-items:center; font-size:22px; color:var(--text-3); padding:0 4px;">+</div>
-        <div class="card" style="flex:1; text-align:center;">
-          <div style="font-size:42px; margin-bottom:12px;">🔒</div>
-          <div class="card-label">Langkah 4</div>
-          <div class="card-title">Mur Pengunci</div>
-          <div class="card-body">Mengunci rod ke dalam kepala, melengkapi dan mengamankan konstruk.</div>
+  <!-- ══════════════════
+       SLIDE 10 — Ring Washer
+  ══════════════════ -->
+  <section class="slide" data-chapter="4">
+    <div class="label">Fitur Utama · Ring Washer</div>
+    <h2 class="title">Ring Washer<br>sebagai Nilai Tambah Produk</h2>
+    <div class="slide-image-layout">
+      <div class="text-col">
+        <p class="subtitle" style="font-size:13.5px; margin-bottom:14px;">Komponen internal yang menjadi pembeda teknis sistem ini.</p>
+        <div class="feature-list">
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Internal ring washer di dalam screw head</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Mendukung kompatibilitas rod 5.5 mm</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Mendukung kompatibilitas rod 6.0 mm</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Menambah fleksibilitas konfigurasi sistem secara keseluruhan</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Satu head dapat mengakomodasi dua ukuran rod berbeda</div></div>
         </div>
       </div>
-      <div class="info-bar">
-        <div class="info-bar-label">Aksesori Opsional</div>
-        <div class="info-bar-value">Ring Washer &nbsp;·&nbsp; <span>Mendistribusikan beban pada antarmuka screw-rod</span> — tersedia dalam varian standar dan long arm</div>
+      <div class="img-col">
+        <div class="img-square stagger">
+          <img src="../../assets/images/emerald-pedicle-screw-system-content-pack/head-pedicle-section-view.jpeg"
+               alt="Head pedicle section view showing ring washer" loading="lazy">
+        </div>
+        <p class="img-caption">Section view showing internal ring washer / insert inside screw head</p>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       06 — COMPONENTS AT A GLANCE
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="3">
-    <div class="slide-tag">Komponen</div>
-    <div class="slide-headline">Lima tipe komponen — satu sistem lengkap</div>
-    <div class="cards-grid g-5">
-      <div class="card" style="text-align:center;">
-        <div class="card-icon" style="margin:0 auto 12px;">🔩</div>
-        <div class="card-label">01</div>
-        <div class="card-title">Batang Screw</div>
-        <div class="card-body">Batang titanium berulir. Ø 4,5 / 5,5 / 6,5 / 7,5mm · P 20–70mm</div>
+  <!-- ══════════════════
+       SLIDE 11 — Locking System
+  ══════════════════ -->
+  <section class="slide" data-chapter="4">
+    <div class="label">Fitur Utama · Locking System</div>
+    <h2 class="title">System Assembly<br>dan Locking Concept</h2>
+    <div class="slide-image-layout">
+      <div class="text-col">
+        <p class="subtitle" style="font-size:13.5px; margin-bottom:14px;">Sistem yang implementatif dimulai dari mekanisme assembly yang jelas.</p>
+        <div class="feature-list">
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Top-loading concept — rod dimasukkan dari atas</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Rod dikunci dengan set screw menggunakan buttress thread</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Tidak memerlukan cap tambahan</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Dirancang mendukung stabilitas engagement yang baik</div></div>
+          <div class="feature-row stagger"><div class="feature-dot"></div><div class="feature-text">Mekanisme sederhana, praktis, dan efisien dalam implementasi</div></div>
+        </div>
       </div>
-      <div class="card" style="text-align:center;">
-        <div class="card-icon" style="margin:0 auto 12px;">🔗</div>
-        <div class="card-label">02</div>
-        <div class="card-title">Kepala Screw</div>
-        <div class="card-body">Mono / Polyaxial / Long Arm / Reduction. Tempat dudukan rod.</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div class="card-icon" style="margin:0 auto 12px;">➖</div>
-        <div class="card-label">03</div>
-        <div class="card-title">Rod</div>
-        <div class="card-body">Ø 6mm · Ti-6Al-4V ELI · P 40–600mm · 23 ukuran</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div class="card-icon" style="margin:0 auto 12px;">🔒</div>
-        <div class="card-label">04</div>
-        <div class="card-title">Mur Pengunci</div>
-        <div class="card-body">Mur 10mm. Mengunci rod pada kepala screw setelah penempatan akhir.</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div class="card-icon" style="margin:0 auto 12px;">⭕</div>
-        <div class="card-label">05</div>
-        <div class="card-title">Ring Washer</div>
-        <div class="card-body">Opsional. Distribusi beban pada antarmuka rod-kepala. Standar &amp; Long Arm.</div>
+      <div class="img-col">
+        <div class="img-square stagger">
+          <img src="../../assets/images/emerald-pedicle-screw-system-content-pack/exploded-pedicle-system-view.jpeg"
+               alt="Exploded system view showing locking sequence" loading="lazy">
+        </div>
+        <p class="img-caption">Exploded system view showing rod introduction and locking sequence</p>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       07 — THE ROD
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="3">
-    <div class="slide-tag">Komponen</div>
-    <div class="slide-headline">Rod 6mm — 23 panjang dari 40mm hingga 600mm</div>
-    <div style="width:100%; display:flex; gap:24px; align-items:flex-start;">
-      <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
-        <div class="rod-scale">
-          <div class="rod-row">
-            <div class="rod-size-label">40mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:7%"></div></div>
-            <div class="rod-bar-note">Konstruk pendek</div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">60mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:10%"></div></div>
-            <div class="rod-bar-note"></div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">80mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:13%"></div></div>
-            <div class="rod-bar-note">Fusi 2 level</div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">100mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:17%"></div></div>
-            <div class="rod-bar-note"></div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">150mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:25%"></div></div>
-            <div class="rod-bar-note">Multi-level</div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">200mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:33%"></div></div>
-            <div class="rod-bar-note"></div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">300mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:50%"></div></div>
-            <div class="rod-bar-note">Konstruk panjang</div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">400mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:67%"></div></div>
-            <div class="rod-bar-note"></div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">500mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:83%"></div></div>
-            <div class="rod-bar-note"></div>
-          </div>
-          <div class="rod-row">
-            <div class="rod-size-label">600mm</div>
-            <div class="rod-bar-track"><div class="rod-bar-fill" style="width:100%"></div></div>
-            <div class="rod-bar-note">Tulang belakang penuh</div>
-          </div>
+  <!-- ══════════════════
+       SLIDE 12 — Thread Options
+  ══════════════════ -->
+  <section class="slide" data-chapter="4">
+    <div class="label">Fitur Utama · Thread Options</div>
+    <h2 class="title">Dua Opsi Konfigurasi<br>Thread Screw</h2>
+    <p class="subtitle" style="font-size:13.5px; margin-bottom:16px;">Platform ini menyediakan dua opsi thread yang berbeda untuk kebutuhan konfigurasi yang lebih luas.</p>
+    <div class="dual-image">
+      <div class="img-panel stagger">
+        <div class="img-square" style="max-width:260px;">
+          <img src="../../assets/images/emerald-pedicle-screw-system-content-pack/single-threaded-view.jpeg"
+               alt="Single-threaded pedicle screw" loading="lazy">
+        </div>
+        <p class="img-caption">Single-threaded pedicle screw configuration in assembled view</p>
+        <div class="thread-desc">
+          <p>Single-Threaded Option</p>
+          <p>Thread tunggal untuk konfigurasi standar. Tip design mendukung kemudahan inseri.</p>
         </div>
       </div>
-      <div style="min-width:200px; display:flex; flex-direction:column; gap:12px;">
-        <div class="spec-block" style="flex:none">
-          <div class="spec-label">Diameter Rod</div>
-          <div class="spec-value">6<span class="spec-unit">mm</span></div>
-          <div class="spec-desc">Konsisten 6mm di seluruh ukuran — kesesuaian instrumen terstandar untuk semua panjang konstruk</div>
+      <div class="img-panel stagger">
+        <div class="img-square" style="max-width:260px;">
+          <img src="../../assets/images/emerald-pedicle-screw-system-content-pack/double-threaded-view.jpeg"
+               alt="Double-threaded pedicle screw" loading="lazy">
         </div>
-        <div class="spec-block" style="flex:none">
-          <div class="spec-label">Total Ukuran</div>
-          <div class="spec-value">23</div>
-          <div class="spec-desc">40 · 50 · 60 · 70 · 80 · 90 · 100–200 (inkremen 10mm) · 250 · 300 · 350 · 400 · 500 · 600mm</div>
+        <p class="img-caption">Double-threaded pedicle screw configuration in assembled view</p>
+        <div class="thread-desc accent">
+          <p>Double-Threaded Option</p>
+          <p>Dual thread untuk purchase yang lebih luas. Memperluas fleksibilitas sistem.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       08 — FOUR HEAD CONFIGURATIONS
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="4">
-    <div class="slide-tag">Konfigurasi Kepala</div>
-    <div class="slide-headline">Empat tipe kepala untuk memenuhi setiap kebutuhan bedah</div>
-    <div class="head-config">
-      <div class="head-card">
-        <div style="font-size:32px; margin-bottom:8px;">⬛</div>
-        <div class="head-type">Tipe 01</div>
-        <div class="head-name">Monoaxial</div>
-        <div class="head-desc">Sudut screw-ke-rod tetap. Rigiditas rotasional maksimum. Kepala tidak bergerak setelah pemasangan.</div>
-        <div class="head-sizes">Ø 4,5 · 5,5 · 6,5mm</div>
+  <!-- ══════════════════
+       SLIDE 13 — Summary
+  ══════════════════ -->
+  <section class="slide" data-chapter="5">
+    <div class="label">Ringkasan Fitur</div>
+    <h2 class="title">Empat Nilai Utama<br>Sistem Ini</h2>
+    <div class="quad-grid">
+      <div class="quad-card stagger">
+        <div class="q-num">01 · Thread Design</div>
+        <h3>Inseri &amp; Fixation Awal</h3>
+        <p>Opsi single-threaded dan double-threaded. Geometri thread dirancang untuk mendukung kemudahan inseri dan fixation awal yang baik.</p>
       </div>
-      <div class="head-card">
-        <div style="font-size:32px; margin-bottom:8px;">🔵</div>
-        <div class="head-type">Tipe 02</div>
-        <div class="head-name">Polyaxial</div>
-        <div class="head-desc">Pivot kepala multi-arah. Menyederhanakan penempatan rod di beberapa level. Pilihan utama standar.</div>
-        <div class="head-sizes">Ø 4,5 · 5,5 · 6,5 · 7,5mm</div>
+      <div class="quad-card stagger">
+        <div class="q-num">02 · Locking System</div>
+        <h3>Sederhana &amp; Praktis</h3>
+        <p>Buttress thread, top-loading, tanpa cap tambahan. Dirancang untuk mendukung engagement yang stabil dan implementasi yang efisien.</p>
       </div>
-      <div class="head-card">
-        <div style="font-size:32px; margin-bottom:8px;">🔺</div>
-        <div class="head-type">Tipe 03</div>
-        <div class="head-name">Long Arm</div>
-        <div class="head-desc">Tinggi lengan diperpanjang. Meningkatkan visualisasi dan penangkapan rod pada kasus yang lebih dalam atau kompleks.</div>
-        <div class="head-sizes">Ø 4,5 · 5,5 · 6,5mm</div>
+      <div class="quad-card stagger">
+        <div class="q-num">03 · Polyaxial Head</div>
+        <h3>Fleksibilitas Alignment</h3>
+        <p>Low head profile, top loading, angulasi hingga 60° total. Membantu alignment di ruang terbatas dan mendukung pembentukan konstruksi.</p>
       </div>
-      <div class="head-card">
-        <div style="font-size:32px; margin-bottom:8px;">⬇️</div>
-        <div class="head-type">Tipe 04</div>
-        <div class="head-name">Reduction</div>
-        <div class="head-desc">Memungkinkan reduksi progresif — menarik tulang belakang ke arah rod. Digunakan untuk koreksi deformitas.</div>
-        <div class="head-sizes">Ø 4,5 · 5,5 · 6,5mm</div>
+      <div class="quad-card stagger">
+        <div class="q-num">04 · Ring Washer</div>
+        <h3>Rod Compatibility Luas</h3>
+        <p>Internal ring washer mendukung rod 5.5 mm dan 6.0 mm. Menambah fleksibilitas konfigurasi sistem secara keseluruhan.</p>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       09 — MONOAXIAL
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="4">
-    <div class="slide-tag">Konfigurasi Kepala</div>
-    <div class="slide-headline">Monoaxial — rigiditas maksimum untuk konstruk yang lugas</div>
-    <div class="detail-hero">
-      <div class="detail-visual">
-        <div style="font-size:48px; margin-bottom:8px;">⬛</div>
-        <div style="font-size:13px; font-weight:700; color:var(--accent); text-align:center;">MONOAXIAL</div>
-        <div style="font-size:12px; color:var(--text-2); text-align:center; margin-top:6px; line-height:1.5;">Kepala tetap.<br>Tanpa<br>penyesuaian sudut.</div>
-      </div>
-      <div class="detail-info">
-        <div class="detail-tag">Tipe Kepala 01</div>
-        <div class="detail-name">Monoaxial Screw</div>
-        <div class="detail-lead">Screw sudut tetap di mana kepala dan batang membentuk sambungan rigid yang tidak dapat bergerak. Rod harus sejajar tepat dengan sumbu screw.</div>
-        <ul class="detail-points">
-          <li>Stabilitas rotasional tertinggi — ideal untuk konstruk yang memerlukan resistensi kuat terhadap gaya torsi</li>
-          <li>Desain mekanis lebih sederhana — lebih sedikit komponen, perilaku yang dapat diprediksi</li>
-          <li>Memerlukan perencanaan praoperasi yang cermat untuk pembentukan kontur rod</li>
-          <li>Pilihan utama untuk fusi segmen pendek di mana keselarasan lugas</li>
-        </ul>
-        <div class="detail-sizes">
-          <div class="detail-sizes-label">Ukuran Tersedia</div>
-          <div class="detail-sizes-val">Ø 4,5mm · Ø 5,5mm · Ø 6,5mm &nbsp;|&nbsp; Panjang 20–60mm (inkremen 5mm)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       10 — POLYAXIAL
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="4">
-    <div class="slide-tag">Konfigurasi Kepala</div>
-    <div class="slide-headline">Polyaxial — kebebasan multi-arah menyederhanakan penempatan rod</div>
-    <div class="detail-hero">
-      <div class="detail-visual">
-        <div style="font-size:48px; margin-bottom:8px;">🔵</div>
-        <div style="font-size:13px; font-weight:700; color:var(--accent); text-align:center;">POLYAXIAL</div>
-        <div style="font-size:12px; color:var(--text-2); text-align:center; margin-top:6px; line-height:1.5;">Kepala berputar<br>di berbagai<br>bidang.</div>
-      </div>
-      <div class="detail-info">
-        <div class="detail-tag">Tipe Kepala 02</div>
-        <div class="detail-name">Polyaxial Screw</div>
-        <div class="detail-lead">Kepala dapat berputar multi-arah sebelum dikunci — memungkinkan rod dipasang tanpa memerlukan sudut screw yang sempurna.</div>
-        <ul class="detail-points">
-          <li>Mengurangi waktu operasi — lebih sedikit pembengkokan dan penyesuaian rod</li>
-          <li>Mengakomodasi variasi alami sudut pedikel di berbagai level</li>
-          <li>Pilihan standar untuk fusi multi-level dan kasus tulang belakang kompleks</li>
-          <li>Tersedia dalam varian batang ulir standar dan ulir ganda</li>
-        </ul>
-        <div class="detail-sizes">
-          <div class="detail-sizes-label">Ukuran Tersedia</div>
-          <div class="detail-sizes-val">Ø 4,5 · 5,5 · 6,5 · 7,5mm &nbsp;|&nbsp; Panjang 20–70mm (inkremen 5mm)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       11 — LONG ARM
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="4">
-    <div class="slide-tag">Konfigurasi Kepala</div>
-    <div class="slide-headline">Polyaxial Long Arm — jangkauan diperpanjang untuk akses bedah lebih dalam</div>
-    <div class="detail-hero">
-      <div class="detail-visual">
-        <div style="font-size:48px; margin-bottom:8px;">🔺</div>
-        <div style="font-size:13px; font-weight:700; color:var(--accent); text-align:center;">LONG ARM</div>
-        <div style="font-size:12px; color:var(--text-2); text-align:center; margin-top:6px; line-height:1.5;">Kepala lebih tinggi.<br>Penangkapan rod<br>lebih dalam.</div>
-      </div>
-      <div class="detail-info">
-        <div class="detail-tag">Tipe Kepala 03</div>
-        <div class="detail-name">Polyaxial Long Arm</div>
-        <div class="detail-lead">Kepala polyaxial dengan lengan yang diperpanjang, memberikan ketinggian tambahan di atas permukaan tulang — meningkatkan visibilitas dan akses instrumen untuk menangkap rod.</div>
-        <ul class="detail-points">
-          <li>Berguna pada kasus dengan luka yang dalam atau jendela bedah yang terbatas</li>
-          <li>Memudahkan pemasangan rod dan pengencangan mur pada anatomi yang sulit</li>
-          <li>Mempertahankan kebebasan penuh kepala polyaxial</li>
-          <li>Tersedia dengan ring washer opsional untuk distribusi beban</li>
-        </ul>
-        <div class="detail-sizes">
-          <div class="detail-sizes-label">Ukuran Tersedia</div>
-          <div class="detail-sizes-val">Ø 4,5 · 5,5 · 6,5mm &nbsp;|&nbsp; Panjang 20–60mm (inkremen 5mm)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       12 — REDUCTION
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="4">
-    <div class="slide-tag">Konfigurasi Kepala</div>
-    <div class="slide-headline">Polyaxial Reduction — koreksi deformitas progresif selama operasi</div>
-    <div class="detail-hero">
-      <div class="detail-visual">
-        <div style="font-size:48px; margin-bottom:8px;">⬇️</div>
-        <div style="font-size:13px; font-weight:700; color:var(--accent); text-align:center;">REDUCTION</div>
-        <div style="font-size:12px; color:var(--text-2); text-align:center; margin-top:6px; line-height:1.5;">Tulang belakang<br>bergerak ke arah<br>rod.</div>
-      </div>
-      <div class="detail-info">
-        <div class="detail-tag">Tipe Kepala 04</div>
-        <div class="detail-name">Polyaxial Reduction Screw</div>
-        <div class="detail-lead">Memungkinkan ahli bedah mereduksi vertebra ke arah rod yang telah diposisikan — bukan membengkokkan rod ke tulang belakang yang bergeser. Kritis untuk koreksi skoliosis dan deformitas.</div>
-        <ul class="detail-points">
-          <li>Mekanisme reduksi terintegrasi dalam desain kepala</li>
-          <li>Memungkinkan koreksi deformitas tulang belakang yang terkontrol dan bertahap</li>
-          <li>Mengurangi kebutuhan gaya pembengkokan rod yang berlebihan</li>
-          <li>Kompatibel dengan komponen rod dan mur yang sama dengan kepala standar</li>
-        </ul>
-        <div class="detail-sizes">
-          <div class="detail-sizes-label">Ukuran Tersedia</div>
-          <div class="detail-sizes-val">Ø 4,5 · 5,5 · 6,5mm &nbsp;|&nbsp; Panjang 20–60mm (inkremen 5mm)</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       13 — SCREW DIAMETERS
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="5">
-    <div class="slide-tag">Rentang Ukuran</div>
-    <div class="slide-headline">Empat diameter yang disesuaikan dengan anatomi pedikel di setiap area tulang belakang</div>
-    <div class="two-col" style="gap:14px;">
-      <div class="diam-card">
-        <div class="diam-num">4,5<span class="diam-unit">mm</span></div>
-        <div class="diam-range">20 – 60mm</div>
-        <div class="diam-sizes">9 panjang · inkremen 5mm</div>
-        <div class="diam-zone">Pedikel toraks</div>
-      </div>
-      <div class="diam-card">
-        <div class="diam-num">5,5<span class="diam-unit">mm</span></div>
-        <div class="diam-range">20 – 60mm</div>
-        <div class="diam-sizes">9 panjang · inkremen 5mm</div>
-        <div class="diam-zone">Toraks tengah hingga lumbal</div>
-      </div>
-      <div class="diam-card">
-        <div class="diam-num">6,5<span class="diam-unit">mm</span></div>
-        <div class="diam-range">20 – 60mm</div>
-        <div class="diam-sizes">9 panjang · inkremen 5mm</div>
-        <div class="diam-zone">Lumbal &amp; sakral — primer</div>
-      </div>
-      <div class="diam-card">
-        <div class="diam-num">7,5<span class="diam-unit">mm</span></div>
-        <div class="diam-range">30 – 70mm</div>
-        <div class="diam-sizes">9 panjang · inkremen 5mm</div>
-        <div class="diam-zone">Lumbal besar / sakral / revisi</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       14 — SCREW LENGTHS
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="5">
-    <div class="slide-tag">Rentang Ukuran</div>
-    <div class="slide-headline">Sembilan panjang per diameter — inkremen 5mm untuk kesesuaian presisi</div>
-    <div style="width:100%; display:flex; gap:20px; align-items:flex-start;">
-      <div style="flex:1; display:flex; flex-direction:column; gap:10px;">
-        <div style="display:grid; grid-template-columns:repeat(9,1fr); gap:8px; width:100%;">
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">20</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">25</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">30</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">35</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">40</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">45</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">50</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">55</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-          <div style="text-align:center;" class="card" style="padding:14px 8px;">
-            <div style="font-size:20px; font-weight:900; color:var(--accent);">60</div>
-            <div style="font-size:10px; color:var(--text-3); font-weight:600;">mm</div>
-          </div>
-        </div>
-        <div class="info-bar" style="margin-top:8px;">
-          <div class="info-bar-label">Catatan — diameter 7,5mm</div>
-          <div class="info-bar-value">Dimulai dari 30mm dan diperpanjang hingga <span>70mm</span> — panjang tambahan untuk anatomi lumbal besar dan sakral</div>
-        </div>
-      </div>
-      <div style="min-width:200px; display:flex; flex-direction:column; gap:12px;">
-        <div class="spec-block" style="flex:none;">
-          <div class="spec-label">Ukuran per Diameter</div>
-          <div class="spec-value">9</div>
-          <div class="spec-desc">Inkremen langkah 5mm yang konsisten di semua diameter — pemilihan ukuran yang dapat diprediksi saat operasi</div>
-        </div>
-        <div class="spec-block" style="flex:none;">
-          <div class="spec-label">Inkremen Langkah</div>
-          <div class="spec-value">5<span class="spec-unit">mm</span></div>
-          <div class="spec-desc">Cukup halus untuk mengakomodasi variasi kedalaman pedikel di berbagai level dan pasien</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       15 — DOUBLE THREADED
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="5">
-    <div class="slide-tag">Rentang Ukuran</div>
-    <div class="slide-headline">Varian ulir ganda — resistensi cabut lebih tinggi untuk tulang yang lemah</div>
-    <div class="thread-compare">
-      <div class="thread-card">
-        <div class="thread-visual">
-          <div class="thread-shaft">
-            <div class="thread-single"></div>
-          </div>
-        </div>
-        <div class="thread-title">Ulir Standar</div>
-        <div class="thread-desc">Pola ulir heliks tunggal. Dioptimalkan untuk densitas tulang normal. Tersedia dalam seluruh rentang diameter dan panjang.</div>
-        <div class="thread-use">Kasus standar · Kualitas tulang normal</div>
-      </div>
-      <div class="thread-card" style="border-color: var(--accent-bd); background: rgba(196,137,26,0.03);">
-        <div class="thread-visual">
-          <div class="thread-shaft">
-            <div class="thread-double"></div>
-          </div>
-        </div>
-        <div class="thread-title" style="color:var(--accent);">Ulir Ganda</div>
-        <div class="thread-desc">Dua awal ulir yang saling berselang. Meningkatkan area kontak tulang-implan, meningkatkan kekuatan tarik pada tulang yang lebih lemah.</div>
-        <div class="thread-use" style="color:var(--accent);">Osteoporosis · Revisi · Tulang lunak</div>
-      </div>
-    </div>
-    <div class="info-bar" style="margin-top:16px;">
-      <div class="info-bar-label">Ketersediaan</div>
-      <div class="info-bar-value">Varian ulir ganda tersedia untuk tipe kepala <span>Polyaxial · Long Arm · Reduction</span> dalam Ø 4,5 · 5,5 · 6,5mm</div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       16 — WHAT IS VBT
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="6">
-    <div class="slide-tag">Emerald T &middot; VBT</div>
-    <div class="slide-headline">Vertebral Body Tethering — koreksi skoliosis non-fusi untuk pasien yang masih tumbuh</div>
-    <div class="two-col">
-      <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
-        <div class="card">
-          <div class="card-label">Apa Itu VBT</div>
-          <div class="card-title">Alternatif modulasi pertumbuhan yang mempertahankan gerak, tanpa fusi tulang belakang</div>
-          <div class="card-body">Screw dipasang pada badan vertebra di sisi konveks kurva skoliosis. Kabel tether fleksibel menghubungkan screw dan memberikan kompresi — mengarahkan pertumbuhan alami pasien untuk secara progresif mengoreksi kurva.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Pendekatan Bedah</div>
-          <div class="card-title">Pendekatan anterior torakoskopik</div>
-          <div class="card-body">Minimal invasif. Screw dipasang secara lateral ke dalam badan vertebra — bukan melalui pedikel dari arah posterior. Memerlukan keahlian torakoskopi dan panduan fluoroskopi.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Prinsip</div>
-          <div class="card-title">Modulasi pertumbuhan Hueter-Volkmann</div>
-          <div class="card-body">Kompresi pada sisi konveks memperlambat pertumbuhan di sisi tersebut. Sisi konkaf tumbuh bebas — secara bertahap mengurangi kelengkungan dari waktu ke waktu tanpa fusi.</div>
-        </div>
-      </div>
-      <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
-        <div class="card" style="border-color:var(--accent-bd); background:rgba(196,137,26,0.03);">
-          <div class="card-label" style="color:var(--accent);">Profil Pasien</div>
-          <div class="card-title">Belum matur secara skeletal — masih dalam masa pertumbuhan</div>
-          <div class="card-body">Risser grade 0–3. Umumnya usia 8–15 tahun. Prosedur ini mengandalkan potensi pertumbuhan yang tersisa — tether menggunakan pertumbuhan tersebut sebagai gaya korektif.</div>
-        </div>
-        <div class="card" style="border-color:var(--accent-bd); background:rgba(196,137,26,0.03);">
-          <div class="card-label" style="color:var(--accent);">Indikasi Utama</div>
-          <div class="card-title">Skoliosis idiopatik remaja (AIS)</div>
-          <div class="card-body">Kurva toraks utama, lumbal, atau ganda. Sesuai untuk kurva umumnya 35–65° pada pasien yang masih tumbuh yang ingin menghindari fusi dan mempertahankan gerak tulang belakang.</div>
-        </div>
-        <div class="card" style="border-color:var(--accent-bd); background:rgba(196,137,26,0.03);">
-          <div class="card-label" style="color:var(--accent);">Keunggulan vs Fusi</div>
-          <div class="card-title">Mempertahankan gerak dan memungkinkan pertumbuhan berkelanjutan</div>
-          <div class="card-body">Tidak seperti fusi tulang belakang posterior, VBT tidak mengunci segmen vertebra — pasien mempertahankan fleksibilitas tulang belakang dan trajektori pertumbuhan normal setelah koreksi.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       17 — EMERALD T COMPONENTS
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="6">
-    <div class="slide-tag">Emerald T &middot; VBT</div>
-    <div class="slide-headline">Emerald T — VBT screw yang dirancang untuk fiksasi badan vertebra pada pasien yang masih tumbuh</div>
-    <div class="cards-grid g-3" style="margin-bottom:14px;">
-      <div class="card">
-        <div class="card-icon">⬛</div>
-        <div class="card-label">Monoaxial</div>
-        <div class="card-title">Monoaxial Screw</div>
-        <div class="card-body">Screw monoaxial standar untuk penempatan badan vertebra. Tersedia dalam Ø 4,5 / 5,5 / 6,5mm. Panjang 20–60mm dengan inkremen 2,5mm untuk kesesuaian presisi pada anatomi remaja.</div>
-      </div>
-      <div class="card" style="border-color:var(--accent-bd);">
-        <div class="card-icon">📌</div>
-        <div class="card-label">Staple Screw</div>
-        <div class="card-title">Staple Screw (Ø 6,0mm)</div>
-        <div class="card-body">Konfigurasi sayap staple tunggal. Desain staple menjangkar ke dalam badan vertebra, memberikan resistansi terhadap migrasi dan rotasi screw — kritis untuk mempertahankan tegangan tether dari waktu ke waktu. Panjang: 9,25mm.</div>
-      </div>
-      <div class="card" style="border-color:var(--accent-bd);">
-        <div class="card-icon">📍</div>
-        <div class="card-label">Double Staple Screw</div>
-        <div class="card-title">Double Staple Screw (Ø 6,5mm)</div>
-        <div class="card-body">Konfigurasi sayap staple ganda untuk fiksasi anti-migrasi yang lebih kuat. Memberikan cengkeraman lebih baik pada tulang badan vertebra yang lebih lunak pada pasien yang lebih muda. Panjang: 12,7mm.</div>
-      </div>
-    </div>
-    <div class="info-bar">
-      <div class="info-bar-label">Mengapa Inkremen Panjang 2,5mm</div>
-      <div class="info-bar-value">Badan vertebra remaja bervariasi dalam kedalaman — <span>langkah 2,5mm</span> memungkinkan ahli bedah memilih kedalaman screw optimal tanpa menembus terlalu dalam atau kurang menjangkar pada anatomi yang lebih kecil</div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       18 — EMERALD vs EMERALD T
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="6">
-    <div class="slide-tag">Emerald T &middot; VBT</div>
-    <div class="slide-headline">Emerald vs Emerald T — dua sistem dengan tujuan klinis yang fundamental berbeda</div>
-    <table class="comp-table" style="margin-top:4px;">
-      <thead>
-        <tr>
-          <th>Fitur</th>
-          <th>Emerald Pedicle System</th>
-          <th>Emerald T — Sistem VBT</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Tujuan Klinis</td>
-          <td>Fiksasi dan fusi tulang belakang</td>
-          <td>Koreksi skoliosis non-fusi (VBT)</td>
-        </tr>
-        <tr>
-          <td>Profil Pasien</td>
-          <td>Semua usia — fraktur, degenerasi, fusi deformitas</td>
-          <td>Belum matur skeletal (Risser 0–3) · AIS · usia 8–15</td>
-        </tr>
-        <tr>
-          <td>Pendekatan Bedah</td>
-          <td>Posterior</td>
-          <td>Anterior · torakoskopik</td>
-        </tr>
-        <tr>
-          <td>Penempatan Screw</td>
-          <td>Melalui pedikel ke dalam badan vertebra</td>
-          <td>Lateral ke dalam badan vertebra (sisi konveks kurva)</td>
-        </tr>
-        <tr>
-          <td>Tipe Screw</td>
-          <td>Monoaxial · Polyaxial · Long Arm · Reduction</td>
-          <td>Monoaxial · Staple · Double Staple</td>
-        </tr>
-        <tr>
-          <td>Presisi Panjang</td>
-          <td>Inkremen 5mm</td>
-          <td>Inkremen 2,5mm — kesesuaian lebih halus untuk anatomi pediatrik</td>
-        </tr>
-        <tr>
-          <td>Gerak Pasca Operasi</td>
-          <td>Berkurang atau hilang pada level yang difusi</td>
-          <td>Dipertahankan — tanpa fusi, mobilitas tulang belakang penuh terjaga</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       19 — MATERIAL
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="7">
-    <div class="slide-tag">Material &amp; Kualitas</div>
-    <div class="slide-headline">Ti-6Al-4V ELI — paduan titanium implant-grade pilihan utama untuk Emerald</div>
-    <div class="two-col">
-      <div class="material-block">
-        <div class="mat-symbol">Ti</div>
-        <div class="mat-name">Ti-6Al-4V ELI</div>
-        <div class="mat-full">Extra Low Interstitial Titanium-Aluminum-Vanadium Alloy</div>
-        <div class="mat-std">ISO 5832-3:2016</div>
-        <ul class="mat-props">
-          <li>Biokompatibilitas superior — aman untuk kontak implan permanen</li>
-          <li>Resistansi korosi tinggi dalam lingkungan fisiologis</li>
-          <li>Rasio kekuatan-terhadap-berat yang sangat baik</li>
-          <li>Modulus rendah — lebih mendekati tulang kortikal daripada baja</li>
-          <li>Kompatibel MRI — artefak minimal</li>
-          <li>Rekam jejak klinis jangka panjang pada implan tulang belakang dan ortopedi</li>
-        </ul>
-      </div>
-      <div style="flex:1; display:flex; flex-direction:column; gap:14px; justify-content:center;">
-        <div class="card">
-          <div class="card-label">Mengapa Grade ELI</div>
-          <div class="card-title">Extra Low Interstitial — kemurnian lebih tinggi, ketahanan lelah lebih baik</div>
-          <div class="card-body">Grade ELI membatasi kandungan oksigen, nitrogen, dan besi di bawah Ti-6Al-4V standar. Hasilnya: daktilitas, ketangguhan fraktur, dan resistansi lelah yang lebih baik — kritis untuk implan tulang belakang jangka panjang di bawah beban siklik.</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Biokompatibilitas</div>
-          <div class="card-title">Dievaluasi sesuai ISO 10993</div>
-          <div class="card-body">Evaluasi biologis mengkonfirmasi keamanan untuk penggunaan implan permanen — pengujian iritasi, sensitisasi, dan sitotoksisitas dilakukan sesuai kerangka ISO 10993.</div>
-        </div>
-        <div class="card" style="border-color:var(--accent-bd); background:rgba(196,137,26,0.03);">
-          <div class="card-label" style="color:var(--accent);">Material Lini Produk Lain</div>
-          <div class="card-title">SS316LVM juga tersedia di produk Trafas lainnya</div>
-          <div class="card-body">Baja tahan karat medis SS316LVM (ISO 5832-1:2016) digunakan pada lini produk ortopedi Trafas lainnya — pilihan material disesuaikan dengan kebutuhan klinis setiap produk.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       20 — QUALITY & COMPLIANCE
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="7">
-    <div class="slide-tag">Material &amp; Kualitas</div>
-    <div class="slide-headline">Diproduksi di bawah sistem mutu tersertifikasi — dari bahan baku hingga produk akhir</div>
-    <div class="two-col">
-      <div class="cert-card">
-        <div class="cert-badge">Manajemen Mutu</div>
-        <div class="cert-name">ISO 13485:2016</div>
-        <div class="cert-by">Disertifikasi oleh TÜV NORD Indonesia</div>
-        <div class="cert-row">
-          <div class="cert-item"><label>No. Sertifikat</label><span>01 05 B 26000149</span></div>
-          <div class="cert-item"><label>Berlaku Dari</label><span>2026-02-04</span></div>
-          <div class="cert-item"><label>Berlaku Hingga</label><span>2029-01-17</span></div>
-        </div>
-        <ul class="cert-list">
-          <li>CAPA dan kesiapan audit</li>
-          <li>Pengendalian dokumen dan keterlacakan</li>
-          <li>QC dalam proses dan akhir</li>
-          <li>Keterlacakan lot DHR</li>
-        </ul>
-      </div>
-      <div class="cert-card">
-        <div class="cert-badge">Izin &amp; Verifikasi Teknis</div>
-        <div class="cert-name">CPAKB &amp; ASTM</div>
-        <div class="cert-by">Izin Kemenkes RI &amp; verifikasi performa mekanis</div>
-        <div class="cert-row">
-          <div class="cert-item"><label>Ruang Lingkup CPAKB</label><span style="font-size:11px;">Thoracolumbosacral Pedicle Screw System</span></div>
-        </div>
-        <div class="cert-row" style="margin-top:8px;">
-          <div class="cert-item"><label>Screw Tulang</label><span>ASTM F543</span></div>
-          <div class="cert-item"><label>Plate Tulang</label><span>ASTM F382</span></div>
-        </div>
-        <ul class="cert-list">
-          <li>Verifikasi kesesuaian dimensional</li>
-          <li>Pengujian kekuatan torsi dan tarik</li>
-          <li>Evaluasi performa kelelahan (fatigue)</li>
-          <li>Kerangka biokompatibilitas ISO 10993 — termasuk BER (Biological Evaluation Report) yang mengkonfirmasi keamanan sebagai implan permanen</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       21 — INOVASI SPINE (NEW)
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="8">
-    <div class="slide-tag">Inovasi Spine</div>
-    <div class="slide-headline">R&amp;D tulang belakang — dari kolaborasi universitas hingga pengembangan aktif</div>
-    <div class="cards-grid g-2" style="margin-bottom:14px;">
-      <div class="card" style="border-color:var(--accent-bd); background:rgba(196,137,26,0.03);">
-        <div class="card-icon">🎓</div>
-        <div class="card-label">KEDAIREKA 2022 — Selesai</div>
-        <div class="card-title">Implan PEEK untuk TLIF</div>
-        <div class="card-body">Kolaborasi riset dengan Universitas Indonesia (2022) melalui program KEDAIREKA. Mengembangkan implan PEEK (Polyether ether ketone) untuk prosedur Transforaminal Lumbar Interbody Fusion (TLIF) — material radiopaque alternatif yang mendekati modulus tulang kortikal.</div>
-      </div>
-      <div class="card" style="border-color:var(--accent-bd); background:rgba(196,137,26,0.03);">
+  <!-- ══════════════════
+       SLIDE 14 — Bio Safety Context
+  ══════════════════ -->
+  <section class="slide" data-chapter="6">
+    <div class="label">Biological Safety</div>
+    <h2 class="title">Mengapa Biological Safety<br>Screening Penting?</h2>
+    <p class="subtitle">Implant harus dievaluasi dari sisi keamanan biologis sebagai bagian dari penilaian produk yang bertanggung jawab.</p>
+    <div class="card-grid cols-2" style="max-width:720px;">
+      <div class="card accent-top stagger">
         <div class="card-icon">🔬</div>
-        <div class="card-label">Proyek Aktif</div>
-        <div class="card-title">Dynamic Vertebral Rod (DVR)</div>
-        <div class="card-body">Pengembangan aktif Dynamic Vertebral Rod (DVR) — sistem rod dinamis yang memungkinkan gerak terkontrol pada level yang difusi. Dirancang untuk mengurangi adjacent segment disease (ASD) pasca fusi lumbal dengan mempertahankan sebagian mobilitas fisiologis.</div>
+        <h3>Kategori Sampel</h3>
+        <p>Implant device – tissue/bone. Kategori ini menentukan jenis dan cakupan pengujian yang relevan.</p>
       </div>
-    </div>
-    <div class="info-bar">
-      <div class="info-bar-label">Komitmen Inovasi</div>
-      <div class="info-bar-value">Trafas berinvestasi dalam R&amp;D spinal domestik — dari kolaborasi akademik hingga pengembangan produk generasi berikutnya</div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────────────────────
-       22 — RINGKASAN
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="9">
-    <div class="slide-tag">Ringkasan</div>
-    <div class="slide-headline">Mengapa Emerald Pedicle System</div>
-    <div class="statements">
-      <div class="stmt-row">
-        <div class="stmt-num">01</div>
-        <div class="stmt-text">4 konfigurasi kepala — Monoaxial, Polyaxial, Long Arm, dan Reduction dalam satu sistem</div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">⏱</div>
+        <h3>Durasi Kontak</h3>
+        <p>Permanent contact (&gt;30 hari). Durasi kontak menentukan tingkat pengujian biologis yang diperlukan.</p>
       </div>
-      <div class="stmt-row">
-        <div class="stmt-num">02</div>
-        <div class="stmt-text">4 diameter dari 4,5 hingga 7,5mm — cakupan penuh anatomi torakolumbosacral</div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">📊</div>
+        <h3>Paket Pengujian Tersedia</h3>
+        <p>Sitotoksisitas · Sensitisasi · Iritasi — tiga aspek biological safety screening yang sudah tersedia.</p>
       </div>
-      <div class="stmt-row">
-        <div class="stmt-num">03</div>
-        <div class="stmt-text">Panjang rod 40–600mm dalam 23 ukuran — dari konstruk pendek hingga instrumentasi tulang belakang penuh</div>
-      </div>
-      <div class="stmt-row">
-        <div class="stmt-num">04</div>
-        <div class="stmt-text">Opsi ulir ganda untuk resistansi cabut lebih tinggi pada tulang yang lemah</div>
-      </div>
-      <div class="stmt-row">
-        <div class="stmt-num">05</div>
-        <div class="stmt-text">Ti-6Al-4V ELI di seluruh komponen — referensi ISO 5832-3, biokompatibilitas dievaluasi ISO 10993 dengan BER</div>
-      </div>
-      <div class="stmt-row">
-        <div class="stmt-num">06</div>
-        <div class="stmt-text">Produksi tersertifikasi ISO 13485:2016 (TÜV NORD) · CPAKB berlisensi · terverifikasi ASTM</div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">📋</div>
+        <h3>Posisi Data</h3>
+        <p>Data ini diposisikan sebagai material/platform biological safety screening — dasar evaluasi awal yang tersedia.</p>
       </div>
     </div>
   </section>
 
-  <!-- ───────────────────────────────────────
-       23 — KONTAK
-  ─────────────────────────────────────── -->
-  <section class="slide slide-standard" data-chapter="9">
-    <div class="slide-tag">Kontak</div>
-    <div class="slide-headline">Ada pertanyaan? Kami siap mendukung kebutuhan klinis dan pengadaan Anda.</div>
-    <div class="contact-grid">
-      <div class="contact-block">
-        <div class="contact-label">Website</div>
-        <div class="contact-value mono">www.trafasmedical.com</div>
+  <!-- ══════════════════
+       SLIDE 15 — Cytotoxicity
+  ══════════════════ -->
+  <section class="slide" data-chapter="6">
+    <div class="label">Biological Safety · Sitotoksisitas</div>
+    <h2 class="title">Hasil Sitotoksisitas<br>di Atas Ambang Aman</h2>
+    <p class="subtitle" style="font-size:13.5px; margin-bottom:6px;">Threshold potensi sitotoksik: viability &lt; 70%. Semua hasil berada di atas ambang.</p>
+    <div class="cytotox-wrap">
+      <p class="threshold-label">▼ Ambang sitotoksik: 70% viability</p>
+      <div class="cytotox-row">
+        <span class="conc">100% extract</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="--target:79.3%"><span class="bar-val">79.298%</span></div>
+        </div>
       </div>
-      <div class="contact-block">
-        <div class="contact-label">Email</div>
-        <div class="contact-value mono">cs.connect@trafasdwimedika.com</div>
+      <div class="cytotox-row">
+        <span class="conc">30% extract</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="--target:82.5%; animation-delay:.3s"><span class="bar-val">82.508%</span></div>
+        </div>
       </div>
-      <div class="contact-block">
-        <div class="contact-label">Telepon</div>
-        <div class="contact-value">+62 (81) 1112-2022<br><span class="contact-muted">(021) 879-46067</span></div>
+      <div class="cytotox-row">
+        <span class="conc">10% extract</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="--target:88.4%; animation-delay:.4s"><span class="bar-val">88.351%</span></div>
+        </div>
       </div>
-      <div class="contact-block">
-        <div class="contact-label">Pabrik</div>
-        <div class="contact-value" style="font-size:13px;">Jl. Tengsaw No. 9C, Tarikolot<br>Citeureup, Kabupaten Bogor, Jawa Barat</div>
+      <div class="cytotox-row">
+        <span class="conc">3% extract</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="--target:97.9%; animation-delay:.5s"><span class="bar-val">97.897%</span></div>
+        </div>
       </div>
-      <div class="contact-block" style="grid-column:1/-1;">
-        <div class="contact-label">Kantor</div>
-        <div class="contact-value" style="font-size:13px;">Pulo Gadung Trade Centre (PTC) Ruko 8C No. 26, Pulo Gadung, Jakarta Timur 13920</div>
+      <p class="cytotox-conclusion">✓ Kesimpulan: tidak menunjukkan cytotoxicity reactivity pada kondisi uji</p>
+      <p class="cytotox-note">Kondisi uji: 0.20 g : 1 mL, 37 ± 1°C, 72 jam · MTT assay</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 16 — Sensitization & Irritation
+  ══════════════════ -->
+  <section class="slide" data-chapter="6">
+    <div class="label">Biological Safety · Sensitisasi &amp; Iritasi</div>
+    <h2 class="title">Hasil Sensitisasi dan Iritasi<br>sebagai Safety Screening</h2>
+    <p class="subtitle" style="font-size:13.5px; margin-bottom:16px;">Dua aspek biological safety lain yang tersedia sebagai bagian dari paket screening awal.</p>
+    <div class="bio-panel">
+      <div class="bio-col stagger">
+        <div class="bio-title">Sensitization Test</div>
+        <div class="bio-std">ISO 10993-10:2021 · Buehler Test</div>
+        <div class="bio-result">Skor 0</div>
+        <div class="bio-label">Non-sensitizer</div>
+        <div class="bio-desc">Closed-Patch Test / Buehler Test. Hasil akhir menunjukkan skor nol — dikategorikan sebagai non-sensitizer.</div>
+      </div>
+      <div class="bio-col stagger">
+        <div class="bio-title">Irritation Test</div>
+        <div class="bio-std">ISO 10993-23:2021 · Single-exposure</div>
+        <div class="bio-result">PII 0.00</div>
+        <div class="bio-label">Negligible / Non-irritant</div>
+        <div class="bio-desc">Single-exposure test. Diamati pada 1h, 24h, 48h, 72h. Primary Irritation Index 0.00 — negligible / non-irritant.</div>
+      </div>
+    </div>
+    <p class="footnote" style="margin-top:16px;">
+      Data ini diposisikan sebagai bagian dari platform/material biological safety screening awal —
+      bukan klaim absolut untuk seluruh konteks klinisnya.
+    </p>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 17 — Mechanical Context
+  ══════════════════ -->
+  <section class="slide" data-chapter="7">
+    <div class="label">Mechanical Evidence</div>
+    <h2 class="title">Pullout Test sebagai<br>Initial Mechanical Evidence</h2>
+    <p class="subtitle">Data mekanik yang tersedia saat ini adalah pullout / loading test berdasarkan ASTM F543.</p>
+    <div class="card-grid cols-2" style="max-width:720px;">
+      <div class="card accent-top stagger">
+        <div class="card-icon">📐</div>
+        <h3>Standar Pengujian</h3>
+        <p>ASTM F543 — standar yang relevan untuk evaluasi awal karakteristik mekanik implant pedicle screw.</p>
+      </div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">📊</div>
+        <h3>Apa yang Diukur</h3>
+        <p>Gaya tarik maksimum sebelum screw tercabut dari media uji — pullout force sebagai indikator awal.</p>
+      </div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">✅</div>
+        <h3>Posisi Data</h3>
+        <p>Data ini dibaca sebagai initial mechanical evidence — bukan klaim bahwa seluruh biomechanical profile sistem telah lengkap.</p>
+      </div>
+      <div class="card accent-top stagger">
+        <div class="card-icon">🔢</div>
+        <h3>Ukuran Tersedia</h3>
+        <p>Data tersedia untuk ukuran 4.5 mm, 5.5 mm, dan 6.5 mm — ukuran utama dalam platform sistem.</p>
       </div>
     </div>
   </section>
 
-  <!-- Nav -->
-  <div id="nav-prev" onclick="changeSlide(-1)">&#8592;</div>
-  <div id="nav-next" onclick="changeSlide(1)">&#8594;</div>
-</main>
+  <!-- ══════════════════
+       SLIDE 18 — Pullout Data
+  ══════════════════ -->
+  <section class="slide" data-chapter="7">
+    <div class="label">Mechanical Evidence · Pullout Data</div>
+    <h2 class="title">Ringkasan Hasil Pullout<br>per Ukuran Screw</h2>
+    <p class="subtitle" style="font-size:13.5px; margin-bottom:16px;">
+      Beberapa ukuran utama sudah memiliki data mechanical yang terukur. Disampaikan secara proporsional sesuai scope evidence yang tersedia.
+    </p>
+    <div style="width:100%; max-width:660px; overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Ukuran Screw</th>
+            <th>Maximum Load (kgf)</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="stagger">
+            <td><strong>4.5 mm</strong></td>
+            <td class="load-value">243.4 – 270.1 kgf</td>
+            <td style="font-size:11.5px; color:var(--muted);">+ satu laporan lain: ~248.2 kgf</td>
+          </tr>
+          <tr class="stagger">
+            <td><strong>5.5 mm</strong></td>
+            <td class="load-value">243.8 – 289.7 kgf</td>
+            <td style="font-size:11.5px; color:var(--muted);">—</td>
+          </tr>
+          <tr class="stagger">
+            <td><strong>6.5 mm</strong></td>
+            <td class="load-value">284.6 – 349.7 kgf</td>
+            <td style="font-size:11.5px; color:var(--muted);">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote" style="margin-top:14px;">
+      Data diposisikan sebagai initial mechanical evidence · ASTM F543 · bukan perbandingan dengan kompetitor
+    </p>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 19 — Procurement Value
+  ══════════════════ -->
+  <section class="slide" data-chapter="8">
+    <div class="label">Nilai Pengadaan</div>
+    <h2 class="title">Dari Data Teknis<br>ke Nilai Nyata bagi Procurement</h2>
+    <p class="subtitle" style="font-size:13.5px; margin-bottom:14px;">Produk ini bukan sekadar efisiensi harga. Ada dasar teknis yang bisa dievaluasi secara objektif.</p>
+    <div class="value-grid">
+      <div class="value-item stagger">
+        <div class="value-icon">⚙️</div>
+        <div>
+          <h4>Fitur Sistem yang Relevan</h4>
+          <p>Polyaxial head, ring washer, locking system, dan thread options — set fitur yang dirancang untuk kebutuhan klinis nyata.</p>
+        </div>
+      </div>
+      <div class="value-item stagger">
+        <div class="value-icon">🔬</div>
+        <div>
+          <h4>Biological Safety Screening</h4>
+          <p>Sitotoksisitas, sensitisasi, dan iritasi — paket screening awal yang sudah tersedia sebagai dasar evaluasi.</p>
+        </div>
+      </div>
+      <div class="value-item stagger">
+        <div class="value-icon">📊</div>
+        <div>
+          <h4>Initial Mechanical Evidence</h4>
+          <p>Pullout data (ASTM F543) untuk ukuran 4.5, 5.5, dan 6.5 mm — data awal yang terukur dan dapat direferensikan.</p>
+        </div>
+      </div>
+      <div class="value-item stagger">
+        <div class="value-icon">💡</div>
+        <div>
+          <h4>Cost-effective &amp; Evaluable</h4>
+          <p>Bukan "produk murah". Produk ini cost-effective dengan basis teknis yang jelas — layak masuk proses evaluasi objektif.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════
+       SLIDE 20 — Closing
+  ══════════════════ -->
+  <section class="slide" data-chapter="8">
+    <div class="label">Penutup</div>
+    <h2 class="title">Produk Ini Layak<br>Masuk Proses Evaluasi</h2>
+    <p class="subtitle">Kami tidak meminta keputusan berdasarkan asumsi. Kami menawarkan dasar evaluasi yang logis, terukur, dan rendah risiko.</p>
+    <div class="closing-box stagger">
+      <p>
+        Intended use sudah jelas. Fitur sistem sudah dapat dijelaskan. Evidence awal sudah tersedia.
+        Karena itu, langkah berikutnya yang paling rasional adalah membawa sistem ini ke proses evaluasi
+        bersama tim klinis dan tim procurement.
+      </p>
+      <div class="cta">→ Evaluasi bersama. Putuskan berdasarkan data.</div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-box stagger">
+        <div class="metric-number" data-count="3">3</div>
+        <div class="metric-label">Paket Biological<br>Safety Screening</div>
+      </div>
+      <div class="metric-box stagger">
+        <div class="metric-number" data-count="3">3</div>
+        <div class="metric-label">Ukuran Screw<br>dengan Pullout Data</div>
+      </div>
+      <div class="metric-box stagger">
+        <div class="metric-number" data-count="4">4</div>
+        <div class="metric-label">Fitur Utama<br>Sistem</div>
+      </div>
+      <div class="metric-box stagger">
+        <div class="metric-number" data-count="2">2</div>
+        <div class="metric-label">Opsi Konfigurasi<br>Thread Screw</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nav buttons -->
+  <button id="nav-prev" onclick="prevSlide()" disabled>← Sebelumnya</button>
+  <button id="nav-next" onclick="nextSlide()">Selanjutnya →</button>
+</div>
 
 <script>
-  const slides = Array.from(document.querySelectorAll('.slide'));
-  const counter = document.getElementById('counter');
-  const chapterBtns = Array.from(document.querySelectorAll('.chapter-btn'));
+  const slides      = document.querySelectorAll('.slide');
+  const counter     = document.getElementById('counter');
+  const mCounter    = document.getElementById('mobile-counter');
+  const chapterBtns = document.querySelectorAll('.chapter-btn');
+  const progressFill= document.getElementById('progress-fill');
+  const btnPrev     = document.getElementById('nav-prev');
+  const btnNext     = document.getElementById('nav-next');
+  const sidebar     = document.getElementById('sidebar');
+  const backdrop    = document.getElementById('backdrop');
+  const hamburger   = document.getElementById('hamburger');
+  const total       = slides.length;
+  const chapterStarts = [0, 1, 3, 6, 8, 12, 13, 16, 18];
+
   let current = 0;
+  let isAnimating = false;
 
-  const chapterStarts = [0, 1, 3, 5, 7, 12, 15, 18, 20, 21];
+  /* ── Show slide ── */
+  function showSlide(n, dir) {
+    if (isAnimating) return;
+    const next = Math.max(0, Math.min(n, total - 1));
+    if (next === current) return;
 
-  function showSlide(index) {
-    slides[current].classList.remove('active');
-    current = Math.max(0, Math.min(index, slides.length - 1));
-    slides[current].classList.add('active');
-    counter.textContent = (current + 1) + ' / ' + slides.length;
-    updateSidebar();
+    isAnimating = true;
+
+    // Fade out current
+    slides[current].style.opacity = '0';
+    slides[current].style.transform = 'translateY(-8px)';
+    slides[current].style.transition = 'opacity .2s ease, transform .2s ease';
+
+    setTimeout(() => {
+      slides[current].classList.remove('active');
+      slides[current].style.opacity = '';
+      slides[current].style.transform = '';
+      slides[current].style.transition = '';
+
+      current = next;
+      slides[current].classList.add('active');
+
+      // Reset stagger animations
+      slides[current].querySelectorAll('.stagger').forEach(el => {
+        el.style.animation = 'none';
+        void el.offsetWidth; // reflow
+        el.style.animation = '';
+      });
+
+      updateUI();
+      isAnimating = false;
+    }, 180);
   }
 
-  function changeSlide(dir) { showSlide(current + dir); }
-  function jumpToChapter(i) { showSlide(chapterStarts[i]); }
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
 
-  function updateSidebar() {
-    const ch = parseInt(slides[current].getAttribute('data-chapter'));
+  /* ── Update UI ── */
+  function updateUI() {
+    const label = (current + 1) + ' / ' + total;
+    counter.textContent = label;
+    mCounter.textContent = label;
+
+    const pct = ((current + 1) / total * 100).toFixed(1);
+    progressFill.style.width = pct + '%';
+
+    btnPrev.disabled = current === 0;
+    btnNext.disabled = current === total - 1;
+
+    const ch = parseInt(slides[current].dataset.chapter);
     chapterBtns.forEach((btn, i) => btn.classList.toggle('active', i === ch));
   }
 
+  /* ── Chapter jump ── */
+  function jumpChapter(idx) {
+    showSlide(chapterStarts[idx]);
+    closeSidebar();
+  }
+
+  /* ── Sidebar (mobile) ── */
+  function toggleSidebar() {
+    const open = sidebar.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    backdrop.classList.toggle('visible', open);
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    hamburger.classList.remove('open');
+    backdrop.classList.remove('visible');
+  }
+
+  /* ── Keyboard ── */
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
-    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+    if (e.key === 'Escape') closeSidebar();
   });
 
-  updateSidebar();
+  /* ── Touch swipe ── */
+  let touchStartX = 0, touchStartY = 0;
+
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
+      if (dx < 0) nextSlide();
+      else prevSlide();
+    }
+  }, { passive: true });
+
+  /* ── Init ── */
+  updateUI();
 </script>
 </body>
 </html>
