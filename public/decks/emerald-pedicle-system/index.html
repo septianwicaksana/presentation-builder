@@ -157,15 +157,31 @@ body {
 }
 
 #sidebar .brand {
-  color: var(--accent);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 0 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px 18px;
   border-bottom: 1px solid #2e2a25;
   margin-bottom: 12px;
   flex-shrink: 0;
+}
+
+#sidebar .brand img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+#sidebar .brand span {
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .chapter-btn {
@@ -821,6 +837,39 @@ body {
 .closing-box .cta { font-size: clamp(15px, 1.8vw, 20px); font-weight: 700; color: var(--accent); margin-top: 18px; }
 
 /* ═══════════════════════════════════════
+   WATERMARK
+═══════════════════════════════════════ */
+#watermark {
+  position: fixed;
+  bottom: 20px;
+  left: calc(var(--sidebar-w) + 20px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  opacity: .35;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+#watermark:hover { opacity: .7; }
+#watermark img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+#watermark span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+@media (max-width: 639px) {
+  #watermark { display: none; }
+}
+
+/* ═══════════════════════════════════════
    NAV BUTTONS
 ═══════════════════════════════════════ */
 #nav-prev, #nav-next {
@@ -1037,7 +1086,11 @@ body {
   <button id="hamburger" onclick="toggleSidebar()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
-  <div id="mobile-brand">Emerald</div>
+  <div id="mobile-brand" style="display:flex;align-items:center;gap:8px;">
+    <img src="../../assets/images/2.4_LOGOMARK/TDM%20Logomark%20Lockup-27.png" alt="TDM Logo"
+         style="width:26px;height:26px;object-fit:contain;background:#fff;border-radius:5px;padding:2px;">
+    <span>Emerald</span>
+  </div>
   <span id="mobile-counter">1 / 20</span>
 </header>
 
@@ -1046,7 +1099,10 @@ body {
 
 <!-- ── Sidebar ── -->
 <nav id="sidebar">
-  <div class="brand">Emerald</div>
+  <div class="brand">
+    <img src="../../assets/images/2.4_LOGOMARK/TDM%20Logomark%20Lockup-27.png" alt="TDM Logo">
+    <span>Emerald</span>
+  </div>
   <button class="chapter-btn active" onclick="jumpChapter(0)">Pembuka</button>
   <button class="chapter-btn" onclick="jumpChapter(1)">Konteks &amp; Sistem</button>
   <button class="chapter-btn" onclick="jumpChapter(2)">Indikasi Klinis</button>
@@ -1069,6 +1125,8 @@ body {
        SLIDE 1 — Cover
   ══════════════════ -->
   <section class="slide active" data-chapter="0">
+    <img src="../../assets/images/2.4_LOGOMARK/TDM%20Logomark%20Lockup-27.png" alt="TDM Logo"
+         style="width:60px;height:60px;object-fit:contain;margin-bottom:14px;animation:coverReveal .5s ease both;">
     <div class="cover-badge">Pengenalan Emerald Pedicle Screw System</div>
     <h1 class="cover-title">Mulai dari Kebutuhan,<br>Bukan dari Harga</h1>
     <div class="cover-divider"></div>
@@ -1619,6 +1677,12 @@ body {
       </div>
     </div>
   </section>
+
+  <!-- Watermark -->
+  <div id="watermark">
+    <img src="../../assets/images/2.4_LOGOMARK/TDM%20Logomark%20Lockup-27.png" alt="TDM Logo">
+    <span>PT Trafas Dinamika Medika</span>
+  </div>
 
   <!-- Nav buttons -->
   <button id="nav-prev" onclick="prevSlide()" disabled>← Sebelumnya</button>
