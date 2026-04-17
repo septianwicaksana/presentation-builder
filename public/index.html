@@ -1,11 +1,1440 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Presentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PT Trafas Dwi Medika — Profil Perusahaan 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #050d1a;
+    --surface:   #0d1f35;
+    --sidebar:   #071526;
+    --accent:    #00b4d8;
+    --accent-lt: rgba(0,180,216,0.1);
+    --accent-bd: rgba(0,180,216,0.28);
+    --text:      #f0f4f8;
+    --text-2:    #8fa8c0;
+    --text-3:    #4a6a85;
+    --border:    rgba(0,180,216,0.12);
+    --border-lt: rgba(0,180,216,0.07);
+    --card:      #0d1f35;
+    --card-bd:   rgba(0,180,216,0.15);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: 210px;
+    min-width: 210px;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .sidebar-brand {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    display: block;
+    margin-bottom: 2px;
+    line-height: 1.4;
+  }
+
+  .sidebar-sub {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .chapter-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text-2);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+  }
+
+  .chapter-btn:hover { color: var(--text); background: rgba(0,180,216,0.05); }
+
+  .chapter-btn.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-lt);
+    font-weight: 700;
+  }
+
+  /* ── Main ── */
+  #main { flex: 1; position: relative; overflow: hidden; }
+
+  #counter {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    z-index: 20;
+  }
+
+  /* ── Slides ── */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 56px 80px 64px;
+    background: var(--bg);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .slide.active { display: flex; opacity: 1; }
+
+  .slide-standard {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 56px;
+  }
+
+  /* ── Typography ── */
+  .slide-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .slide-headline {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 28px;
+    line-height: 1.25;
+    max-width: 760px;
+  }
+
+  /* ── Cover ── */
+  .slide-cover {
+    background: var(--bg);
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-cover::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 55%;
+    height: 100%;
+    background: radial-gradient(ellipse at 80% 40%, rgba(0,180,216,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .slide-cover::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 40%;
+    height: 50%;
+    background: radial-gradient(ellipse at 20% 80%, rgba(0,100,160,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cover-eyebrow {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-title {
+    font-size: 54px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-title span { color: var(--accent); }
+
+  .cover-sub {
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--text-2);
+    margin-bottom: 36px;
+    max-width: 520px;
+    line-height: 1.55;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-line {
+    width: 52px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-chips {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-chip {
+    padding: 5px 14px;
+    border: 1px solid var(--accent-bd);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+
+  .cover-byline {
+    position: absolute;
+    bottom: 36px;
+    right: 80px;
+    font-size: 11.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    z-index: 1;
+  }
+
+  /* ── Cards ── */
+  .cards-grid { display: grid; gap: 14px; width: 100%; }
+  .g-4 { grid-template-columns: repeat(4,1fr); }
+  .g-3 { grid-template-columns: repeat(3,1fr); }
+  .g-2 { grid-template-columns: repeat(2,1fr); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 12px;
+    padding: 20px 18px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .card:hover { border-color: var(--accent-bd); box-shadow: 0 2px 16px rgba(0,180,216,0.08); }
+
+  .card-icon {
+    width: 36px; height: 36px;
+    background: var(--accent-lt);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 5px;
+  }
+
+  .card-title { font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .card-body { font-size: 12.5px; color: var(--text-2); line-height: 1.6; }
+
+  /* ── Two-col ── */
+  .two-col { display: flex; gap: 20px; width: 100%; }
+
+  /* ── Spec block ── */
+  .spec-block {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 14px;
+    padding: 28px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spec-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), rgba(0,180,216,0.3));
+  }
+
+  .spec-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .spec-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.55; margin-top: 12px; }
+
+  /* ── Timeline ── */
+  .timeline {
+    width: 100%;
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 32px;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), rgba(0,180,216,0.2));
+  }
+
+  .tl-item {
+    flex: 1;
+    padding-top: 60px;
+    padding-right: 16px;
+    position: relative;
+  }
+
+  .tl-dot {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .tl-year {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+
+  .tl-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+
+  .tl-body {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.55;
+  }
+
+  /* ── Focus cards ── */
+  .focus-card {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 16px;
+    padding: 28px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .focus-card:hover { border-color: var(--accent-bd); }
+
+  .focus-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .focus-num {
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(0,180,216,0.1);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .focus-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .focus-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .focus-tag {
+    display: inline-block;
+    background: var(--accent-lt);
+    border: 1px solid var(--accent-bd);
+    color: var(--accent);
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Org grid ── */
+  .org-grid {
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .org-card {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+  }
+
+  .org-icon { font-size: 26px; margin-bottom: 10px; }
+  .org-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .org-items { list-style: none; }
+
+  .org-items li {
+    font-size: 11px;
+    color: var(--text-2);
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border-lt);
+    line-height: 1.4;
+  }
+
+  .org-items li:last-child { border-bottom: none; }
+
+  /* ── Process flow ── */
+  .process-flow {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .process-step {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 10px;
+    padding: 16px 10px;
+    text-align: center;
+  }
+
+  .process-arrow {
+    font-size: 16px;
+    color: var(--accent);
+    padding: 0 5px;
+    flex-shrink: 0;
+  }
+
+  .process-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  .process-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .process-sub { font-size: 10.5px; color: var(--text-2); line-height: 1.4; }
+
+  /* ── Cert cards ── */
+  .cert-card {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 14px;
+    padding: 24px 26px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cert-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), rgba(0,180,216,0.3));
+  }
+
+  .cert-badge {
+    display: inline-block;
+    background: var(--accent-lt);
+    border: 1px solid var(--accent-bd);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 11px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .cert-name { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+  .cert-by { font-size: 12px; color: var(--text-2); margin-bottom: 14px; }
+
+  .cert-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
+
+  .cert-item label {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 3px;
+  }
+
+  .cert-item span { font-size: 12px; font-weight: 700; color: var(--text); }
+
+  .cert-list { list-style: none; margin-top: 12px; }
+
+  .cert-list li {
+    font-size: 11.5px;
+    color: var(--text-2);
+    padding: 3.5px 0 3.5px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .cert-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 9px; top: 6px; }
+
+  /* ── Material block ── */
+  .material-block {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 14px;
+    padding: 28px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .material-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), rgba(0,180,216,0.3));
+  }
+
+  .mat-symbol {
+    font-size: 52px;
+    font-weight: 900;
+    color: rgba(0,180,216,0.15);
+    line-height: 1;
+    margin-bottom: 6px;
+    font-family: monospace;
+  }
+
+  .mat-name { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+  .mat-full { font-size: 12.5px; color: var(--text-2); margin-bottom: 14px; line-height: 1.4; }
+
+  .mat-std {
+    display: inline-block;
+    background: var(--accent-lt);
+    border: 1px solid var(--accent-bd);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: monospace;
+  }
+
+  .mat-props { list-style: none; }
+
+  .mat-props li {
+    font-size: 12.5px;
+    color: var(--text-2);
+    padding: 5px 0 5px 18px;
+    position: relative;
+    border-bottom: 1px solid var(--border-lt);
+  }
+
+  .mat-props li:last-child { border-bottom: none; }
+  .mat-props li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 7px; }
+
+  /* ── Verif block ── */
+  .verif-block {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .verif-icon { font-size: 22px; margin-bottom: 8px; }
+  .verif-std { font-size: 14px; font-weight: 800; color: var(--accent); margin-bottom: 3px; font-family: monospace; }
+  .verif-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .verif-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.5; }
+
+  /* ── Innovation cards ── */
+  .innov-card {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .innov-year {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 5px;
+  }
+
+  .innov-title { font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .innov-partner { font-size: 11px; color: var(--text-3); margin-bottom: 8px; font-style: italic; }
+  .innov-desc { font-size: 12px; color: var(--text-2); line-height: 1.55; }
+
+  .innov-status {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .status-done { background: var(--accent-lt); border: 1px solid var(--accent-bd); color: var(--accent); }
+  .status-active { background: rgba(0,200,120,0.1); border: 1px solid rgba(0,200,120,0.3); color: #00c878; }
+
+  /* ── Summary statements ── */
+  .statements { display: flex; flex-direction: column; gap: 11px; width: 100%; }
+
+  .stmt-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 13px 22px;
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 11px;
+    border-left: 3px solid var(--accent);
+    transition: box-shadow 0.15s;
+  }
+
+  .stmt-row:hover { box-shadow: 0 2px 12px rgba(0,180,216,0.1); }
+
+  .stmt-num { font-size: 18px; font-weight: 900; color: rgba(0,180,216,0.3); min-width: 28px; }
+  .stmt-text { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  /* ── Contact ── */
+  .contact-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; width: 100%; }
+
+  .contact-block {
+    background: var(--card);
+    border: 1px solid var(--card-bd);
+    border-radius: 11px;
+    padding: 18px 22px;
+  }
+
+  .contact-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 7px;
+  }
+
+  .contact-value { font-size: 13.5px; font-weight: 600; color: var(--text); line-height: 1.55; }
+  .contact-value.mono { font-family: monospace; font-size: 13px; }
+  .contact-muted { color: var(--text-2); font-size: 12.5px; font-weight: 400; }
+
+  /* ── Info bar ── */
+  .info-bar {
+    padding: 14px 20px;
+    background: var(--accent-lt);
+    border: 1px solid var(--accent-bd);
+    border-radius: 10px;
+    width: 100%;
+  }
+
+  .info-bar-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 3px;
+  }
+
+  .info-bar-value { font-size: 14px; font-weight: 700; color: var(--text); }
+  .info-bar-value span { color: var(--accent); }
+
+  /* ── Vision mission ── */
+  .vision-box {
+    background: var(--card);
+    border: 1px solid var(--accent-bd);
+    border-radius: 14px;
+    padding: 28px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vision-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+  }
+
+  .vm-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .vm-quote {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  .vm-items { list-style: none; }
+
+  .vm-items li {
+    font-size: 13px;
+    color: var(--text-2);
+    padding: 6px 0 6px 18px;
+    position: relative;
+    border-bottom: 1px solid var(--border-lt);
+    line-height: 1.4;
+  }
+
+  .vm-items li:last-child { border-bottom: none; }
+  .vm-items li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 10px; top: 9px; }
+
+  /* ── Nav ── */
+  #nav-prev, #nav-next {
+    position: absolute;
+    bottom: 22px;
+    width: 38px; height: 38px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-2);
+    font-size: 15px;
+    transition: all 0.15s;
+    z-index: 20;
+    user-select: none;
+  }
+
+  #nav-prev { right: 76px; }
+  #nav-next { right: 28px; }
+
+  #nav-prev:hover, #nav-next:hover {
+    background: var(--accent-lt);
+    border-color: var(--accent-bd);
+    color: var(--accent);
+  }
+</style>
 </head>
 <body>
-  <p>Presentation deck coming soon. Run the HTML Presentation Builder skill to generate your deck here.</p>
+
+<!-- ════════════════════════════
+     SIDEBAR
+════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <span class="sidebar-brand">PT Trafas Dwi Medika</span>
+    <span class="sidebar-sub">Profil Perusahaan</span>
+  </div>
+  <button class="chapter-btn active" onclick="jumpToChapter(0)">Pembuka</button>
+  <button class="chapter-btn" onclick="jumpToChapter(1)">Siapa Kami</button>
+  <button class="chapter-btn" onclick="jumpToChapter(2)">Perjalanan</button>
+  <button class="chapter-btn" onclick="jumpToChapter(3)">Fokus Produk</button>
+  <button class="chapter-btn" onclick="jumpToChapter(4)">Kapabilitas</button>
+  <button class="chapter-btn" onclick="jumpToChapter(5)">Kualitas &amp; Kepatuhan</button>
+  <button class="chapter-btn" onclick="jumpToChapter(6)">Material &amp; Verifikasi</button>
+  <button class="chapter-btn" onclick="jumpToChapter(7)">Inovasi &amp; Kolaborasi</button>
+  <button class="chapter-btn" onclick="jumpToChapter(8)">Penutup</button>
+</nav>
+
+<!-- ════════════════════════════
+     MAIN
+════════════════════════════ -->
+<main id="main">
+  <div id="counter">1 / 17</div>
+
+  <!-- ── 01 COVER ── -->
+  <section class="slide slide-cover active" data-chapter="0">
+    <div class="cover-eyebrow">Profil Perusahaan &middot; 2026</div>
+    <h1 class="cover-title">PT <span>Trafas</span><br>Dwi Medika</h1>
+    <div class="cover-sub">Manufaktur implan ortopedi berbasis rekayasa biomedis — dari desain hingga produksi untuk trauma, spine, dan CMF.</div>
+    <div class="cover-line"></div>
+    <div class="cover-chips">
+      <div class="cover-chip">Trauma</div>
+      <div class="cover-chip">Spine</div>
+      <div class="cover-chip">CMF</div>
+      <div class="cover-chip">ISO 13485:2016</div>
+    </div>
+    <div class="cover-byline">www.trafasmedical.com</div>
+  </section>
+
+  <!-- ── 02 SIAPA KAMI ── -->
+  <section class="slide slide-standard" data-chapter="1">
+    <div class="slide-tag">Siapa Kami</div>
+    <div class="slide-headline">Manufaktur alat kesehatan Indonesia berbasis rekayasa biomedis</div>
+    <div class="cards-grid g-4">
+      <div class="card">
+        <div class="card-icon">🏭</div>
+        <div class="card-label">Fokus Bisnis</div>
+        <div class="card-title">Manufaktur Implan Ortopedi</div>
+        <div class="card-body">Merancang, mengembangkan, dan memproduksi implan ortopedi untuk kebutuhan klinis di Indonesia.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🦴</div>
+        <div class="card-label">Area Produk</div>
+        <div class="card-title">Trauma · Spine · CMF</div>
+        <div class="card-body">Tiga area spesialisasi klinis utama — dari fiksasi fraktur trauma hingga koreksi tulang belakang dan rekonstruksi kraniomaksilofasial.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <div class="card-label">Pendekatan</div>
+        <div class="card-title">Engineering-Driven</div>
+        <div class="card-body">Desain produk mengikuti anatomi manusia dan dipandu input klinis — mengutamakan relevansi klinis dan ketepatan teknis.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <div class="card-label">Kredibilitas</div>
+        <div class="card-title">ISO 13485 &amp; CPAKB</div>
+        <div class="card-body">Sistem mutu tersertifikasi, kepatuhan regulasi, traceability penuh, dan verifikasi terhadap standar teknis internasional.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 VISI & MISI ── -->
+  <section class="slide slide-standard" data-chapter="1">
+    <div class="slide-tag">Siapa Kami</div>
+    <div class="slide-headline">Visi dan misi yang mengarahkan setiap keputusan produk dan kualitas</div>
+    <div class="two-col">
+      <div class="vision-box">
+        <div class="vm-label">Visi</div>
+        <div class="vm-quote">"Bring out well designed medical devices that are credible for the human being to relieve pain and restore health."</div>
+        <div style="font-size:12px; color:var(--text-2); line-height:1.6;">Mewujudkan alat kesehatan yang dirancang dengan baik, kredibel, dan mampu meredakan nyeri serta memulihkan kesehatan pasien.</div>
+      </div>
+      <div class="vision-box" style="border-color:var(--border);">
+        <div class="vm-label">Misi</div>
+        <ul class="vm-items">
+          <li>Memproduksi alat kesehatan berkualitas tinggi berdasarkan penerapan rekayasa biomedis</li>
+          <li>Memenuhi permintaan alat kesehatan yang terus meningkat</li>
+          <li>Berkontribusi pada pengembangan industri alat kesehatan nasional</li>
+        </ul>
+        <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+          <div style="padding:4px 12px; background:var(--accent-lt); border:1px solid var(--accent-bd); border-radius:4px; font-size:11px; font-weight:700; color:var(--accent);">Kualitas Tinggi</div>
+          <div style="padding:4px 12px; background:var(--accent-lt); border:1px solid var(--accent-bd); border-radius:4px; font-size:11px; font-weight:700; color:var(--accent);">Penuhi Kebutuhan</div>
+          <div style="padding:4px 12px; background:var(--accent-lt); border:1px solid var(--accent-bd); border-radius:4px; font-size:11px; font-weight:700; color:var(--accent);">Kontribusi Industri</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 PERJALANAN ── -->
+  <section class="slide slide-standard" data-chapter="2">
+    <div class="slide-tag">Perjalanan Kami</div>
+    <div class="slide-headline">Dari fondasi awal hingga manufaktur ortopedi yang bersertifikat penuh</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2008</div>
+        <div class="tl-title">PT Mitra Fajar Selaras</div>
+        <div class="tl-body">Titik awal perjalanan perusahaan — membangun fondasi dalam distribusi dan pengembangan alat kesehatan ortopedi.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(0,180,216,0.5);"></div>
+        <div class="tl-year">2016–2018</div>
+        <div class="tl-title">Fase Investasi &amp; Pembangunan</div>
+        <div class="tl-body">Investasi strategis dalam infrastruktur, kapabilitas manufaktur, dan pengembangan kompetensi internal.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2019</div>
+        <div class="tl-title">PT Trafas Dwi Medika</div>
+        <div class="tl-body">Entitas baru didirikan dengan fokus penuh pada desain, pengembangan, dan manufaktur implan ortopedi.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="box-shadow:0 0 0 2px var(--accent), 0 0 12px rgba(0,180,216,0.4);"></div>
+        <div class="tl-year">2021–Kini</div>
+        <div class="tl-title">R&amp;D, Pengembangan &amp; Manufaktur</div>
+        <div class="tl-body">Aktif meriset, mengembangkan, dan memproduksi bone plate and screw untuk seluruh klasifikasi — trauma, spine, dan CMF.</div>
+      </div>
+    </div>
+    <div class="info-bar" style="margin-top:28px;">
+      <div class="info-bar-label">Status Saat Ini</div>
+      <div class="info-bar-value">Tersertifikasi <span>ISO 13485:2016</span> · Berlisensi <span>CPAKB</span> · Aktif berproduksi &amp; berinovasi</div>
+    </div>
+  </section>
+
+  <!-- ── 05 FOKUS PRODUK OVERVIEW ── -->
+  <section class="slide slide-standard" data-chapter="3">
+    <div class="slide-tag">Fokus Produk</div>
+    <div class="slide-headline">Tiga area spesialisasi klinis — satu sistem produksi terintegrasi</div>
+    <div class="two-col">
+      <div class="focus-card">
+        <div class="focus-num">01</div>
+        <div class="focus-name">Trauma</div>
+        <div class="focus-desc">Bone plate dan screw untuk fiksasi internal fraktur. Dirancang untuk stabilitas mekanis, kesesuaian anatomi, dan hasil fusi yang optimal.</div>
+        <div class="focus-tag">Fiksasi Internal Fraktur</div>
+      </div>
+      <div class="focus-card">
+        <div class="focus-num">02</div>
+        <div class="focus-name">Spine</div>
+        <div class="focus-desc">Sistem bone plate dan screw untuk pembedahan tulang belakang — fiksasi, fusi, koreksi deformitas, dan stabilisasi torakolumbosacral.</div>
+        <div class="focus-tag">Bedah Tulang Belakang</div>
+      </div>
+      <div class="focus-card">
+        <div class="focus-num">03</div>
+        <div class="focus-name">CMF</div>
+        <div class="focus-desc">Bone plate dan screw untuk pembedahan kraniomaksilofasial — rekonstruksi tengkorak, wajah, dan mandibula dengan presisi tinggi.</div>
+        <div class="focus-tag">Kraniomaksilofasial</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 06 FOKUS PRODUK DETAIL ── -->
+  <section class="slide slide-standard" data-chapter="3">
+    <div class="slide-tag">Fokus Produk</div>
+    <div class="slide-headline">Setiap area produk didukung sistem mutu dan verifikasi teknis yang sama</div>
+    <div class="cards-grid g-3">
+      <div class="card">
+        <div class="card-icon">💥</div>
+        <div class="card-label">Trauma</div>
+        <div class="card-title">Stabilisasi Fraktur Internal</div>
+        <div class="card-body">Sistem plat dan screw untuk fiksasi tulang panjang dan ekstremitas. Dirancang untuk beban fisiologis dan pertumbuhan ulang tulang yang optimal.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔗</div>
+        <div class="card-label">Spine</div>
+        <div class="card-title">Fiksasi &amp; Koreksi Tulang Belakang</div>
+        <div class="card-body">Termasuk sistem pedicle screw torakolumbosacral untuk fusi, stabilisasi fraktur vertebra, koreksi skoliosis, dan penyakit degeneratif.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">💀</div>
+        <div class="card-label">CMF</div>
+        <div class="card-title">Rekonstruksi Kraniomaksilofasial</div>
+        <div class="card-body">Sistem mini plate dan micro plate untuk rekonstruksi tengkorak, koreksi deformitas wajah, bedah orthognathic, dan bedah trauma maksilofasial.</div>
+      </div>
+    </div>
+    <div class="info-bar" style="margin-top:16px;">
+      <div class="info-bar-label">Material yang Digunakan</div>
+      <div class="info-bar-value"><span>SS316LVM</span> (ISO 5832-1:2016) &nbsp;&middot;&nbsp; <span>Ti-6Al-4V ELI</span> (ISO 5832-3:2016)</div>
+    </div>
+  </section>
+
+  <!-- ── 07 KAPABILITAS ORGANISASI ── -->
+  <section class="slide slide-standard" data-chapter="4">
+    <div class="slide-tag">Kapabilitas</div>
+    <div class="slide-headline">Tim terfokus dengan kepemilikan jelas dari desain hingga pengiriman</div>
+    <div class="org-grid">
+      <div class="org-card">
+        <div class="org-icon">🏢</div>
+        <div class="org-name">Direktur / CEO</div>
+        <ul class="org-items">
+          <li>Strategi &amp; kepatuhan</li>
+          <li>Alokasi sumber daya</li>
+          <li>Eskalasi keputusan</li>
+        </ul>
+      </div>
+      <div class="org-card">
+        <div class="org-icon">📋</div>
+        <div class="org-name">Quality &amp; Regulatory</div>
+        <ul class="org-items">
+          <li>QMS ISO 13485</li>
+          <li>Kepatuhan CPAKB</li>
+          <li>CAPA &amp; audit</li>
+          <li>Izin Edar</li>
+          <li>Traceability</li>
+        </ul>
+      </div>
+      <div class="org-card">
+        <div class="org-icon">🔬</div>
+        <div class="org-name">R&amp;D</div>
+        <ul class="org-items">
+          <li>Desain &amp; input klinis</li>
+          <li>Manajemen risiko</li>
+          <li>Verifikasi ASTM</li>
+          <li>Umpan balik klinis</li>
+        </ul>
+      </div>
+      <div class="org-card">
+        <div class="org-icon">⚙️</div>
+        <div class="org-name">Produksi</div>
+        <ul class="org-items">
+          <li>Mesin CNC</li>
+          <li>Finishing &amp; packaging</li>
+          <li>QC dalam proses</li>
+          <li>QC akhir</li>
+          <li>Lot traceability</li>
+        </ul>
+      </div>
+      <div class="org-card">
+        <div class="org-icon">🚚</div>
+        <div class="org-name">Supply Chain</div>
+        <ul class="org-items">
+          <li>Perencanaan demand</li>
+          <li>Inspeksi incoming</li>
+          <li>Koordinasi vendor</li>
+          <li>Manajemen inventori</li>
+          <li>Pengiriman</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 08 PROSES PRODUKSI ── -->
+  <section class="slide slide-standard" data-chapter="4">
+    <div class="slide-tag">Kapabilitas</div>
+    <div class="slide-headline">Proses produksi terkontrol — dari bahan baku hingga produk jadi</div>
+    <div class="process-flow">
+      <div class="process-step">
+        <div class="process-num">01</div>
+        <div class="process-name">Desain &amp; R&D</div>
+        <div class="process-sub">Input klinis · manajemen risiko · verifikasi spesifikasi</div>
+      </div>
+      <div class="process-arrow">›</div>
+      <div class="process-step">
+        <div class="process-num">02</div>
+        <div class="process-name">Incoming QC</div>
+        <div class="process-sub">Inspeksi material · sertifikasi bahan baku implant-grade</div>
+      </div>
+      <div class="process-arrow">›</div>
+      <div class="process-step">
+        <div class="process-num">03</div>
+        <div class="process-name">Machining CNC</div>
+        <div class="process-sub">Permesinan presisi · kontrol dimensi · finishing permukaan</div>
+      </div>
+      <div class="process-arrow">›</div>
+      <div class="process-step">
+        <div class="process-num">04</div>
+        <div class="process-name">QC Dalam Proses</div>
+        <div class="process-sub">Pengukuran berkala · pengendalian penyimpangan</div>
+      </div>
+      <div class="process-arrow">›</div>
+      <div class="process-step">
+        <div class="process-num">05</div>
+        <div class="process-name">QC Akhir &amp; Packaging</div>
+        <div class="process-sub">Inspeksi final · lot DHR · pengemasan</div>
+      </div>
+      <div class="process-arrow">›</div>
+      <div class="process-step">
+        <div class="process-num">06</div>
+        <div class="process-name">Pengiriman</div>
+        <div class="process-sub">Distribusi tepat waktu · keterlacakan penuh</div>
+      </div>
+    </div>
+    <div class="info-bar" style="margin-top:20px;">
+      <div class="info-bar-label">Prinsip Utama</div>
+      <div class="info-bar-value">Setiap produk dapat ditelusuri dari <span>bahan baku</span> hingga <span>produk jadi</span> melalui sistem DHR lot traceability</div>
+    </div>
+  </section>
+
+  <!-- ── 09 ISO 13485 ── -->
+  <section class="slide slide-standard" data-chapter="5">
+    <div class="slide-tag">Kualitas &amp; Kepatuhan</div>
+    <div class="slide-headline">Tersertifikasi ISO 13485:2016 — sistem manajemen mutu alat kesehatan</div>
+    <div class="two-col">
+      <div class="cert-card">
+        <div class="cert-badge">Manajemen Mutu</div>
+        <div class="cert-name">ISO 13485:2016</div>
+        <div class="cert-by">Disertifikasi oleh TÜV NORD Indonesia</div>
+        <div class="cert-row">
+          <div class="cert-item"><label>No. Sertifikat</label><span>01 05 B 26000149</span></div>
+        </div>
+        <div class="cert-row" style="margin-top:8px;">
+          <div class="cert-item"><label>Berlaku Dari</label><span>2026-02-04</span></div>
+          <div class="cert-item"><label>Berlaku Hingga</label><span>2029-01-17</span></div>
+          <div class="cert-item"><label>Sertifikasi Awal</label><span>2023-01-18</span></div>
+        </div>
+        <div style="margin-top:12px; font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:6px;">Ruang Lingkup</div>
+        <ul class="cert-list" style="margin-top:0;">
+          <li>Design and Manufacture of Single and Multiple Component Metallic Bone Fixation Appliances and Accessories</li>
+          <li>Smooth and Threaded Metallic Bone Fixation Fastener</li>
+          <li>Thoracolumbosacral Pedicle Screw System</li>
+        </ul>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:14px; justify-content:center;">
+        <div class="card">
+          <div class="card-label">Cakupan Siklus Hidup Produk</div>
+          <div class="card-title">Dari desain hingga distribusi</div>
+          <div class="card-body">ISO 13485 mengharuskan kontrol mutu menyeluruh mulai dari desain, pemilihan material, proses manufaktur, hingga distribusi dan penanganan keluhan.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Pilar Sistem Mutu</div>
+          <div class="card-title">CAPA · Audit · Traceability · Kontrol Dokumen</div>
+          <div class="card-body">Corrective and Preventive Actions, kesiapan audit internal dan eksternal, pengendalian dokumen, serta keterlacakan penuh DHR lot di setiap tahap produksi.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 10 CPAKB ── -->
+  <section class="slide slide-standard" data-chapter="5">
+    <div class="slide-tag">Kualitas &amp; Kepatuhan</div>
+    <div class="slide-headline">CPAKB — izin produksi alat kesehatan aktif dari Kemenkes RI</div>
+    <div class="two-col">
+      <div class="cert-card">
+        <div class="cert-badge">Izin Produksi Alkes</div>
+        <div class="cert-name">CPAKB / CPB Alkes</div>
+        <div class="cert-by">Kementerian Kesehatan Republik Indonesia</div>
+        <div class="cert-row">
+          <div class="cert-item"><label>PB UMKU</label><span style="font-size:11px;">812011104341300020001</span></div>
+        </div>
+        <div class="cert-row" style="margin-top:8px;">
+          <div class="cert-item"><label>NIB</label><span>8120111043413</span></div>
+          <div class="cert-item"><label>KBLI</label><span>32502</span></div>
+          <div class="cert-item"><label>Status Modal</label><span>PMDN</span></div>
+        </div>
+        <div class="cert-row" style="margin-top:8px;">
+          <div class="cert-item"><label>Masa Berlaku</label><span>s.d. 12-01-2031</span></div>
+        </div>
+        <div class="cert-row" style="margin-top:8px;">
+          <div class="cert-item"><label>Penanggung Jawab Teknis</label><span>Anggie Puspitasari, S.T. Biomedis</span></div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-badge">Ruang Lingkup CPAKB</div>
+        <div class="cert-name">Produk yang Diizinkan</div>
+        <div class="cert-by">Klasifikasi alat kesehatan yang tercakup</div>
+        <ul class="cert-list" style="margin-top:14px;">
+          <li>Peralatan Ortopedi</li>
+          <li>Smooth or Threaded Metallic Bone Fixation Fastener</li>
+          <li>Single / Multiple Component Metallic Bone Fixation Appliances and Accessories</li>
+          <li>Thoracolumbosacral Pedicle Screw System</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 11 MATERIAL ── -->
+  <section class="slide slide-standard" data-chapter="6">
+    <div class="slide-tag">Material &amp; Verifikasi</div>
+    <div class="slide-headline">Dua material implant-grade berstandar internasional</div>
+    <div class="two-col">
+      <div class="material-block">
+        <div class="mat-symbol">Fe</div>
+        <div class="mat-name">SS316LVM</div>
+        <div class="mat-full">Low Carbon Vacuum Melted Stainless Steel</div>
+        <div class="mat-std">ISO 5832-1:2016</div>
+        <ul class="mat-props">
+          <li>Kekuatan tinggi dan sifat fatigue yang sangat baik</li>
+          <li>Ketahanan korosi dalam lingkungan fisiologis</li>
+          <li>Proses vacuum melting meningkatkan kemurnian dan konsistensi</li>
+          <li>Material pilihan untuk trauma dan CMF implant</li>
+        </ul>
+      </div>
+      <div class="material-block">
+        <div class="mat-symbol">Ti</div>
+        <div class="mat-name">Ti-6Al-4V ELI</div>
+        <div class="mat-full">Extra Low Interstitial Titanium-Aluminum-Vanadium Alloy</div>
+        <div class="mat-std">ISO 5832-3:2016</div>
+        <ul class="mat-props">
+          <li>Biokompatibilitas superior — aman untuk implan permanen</li>
+          <li>Ketahanan korosi tinggi dalam lingkungan tubuh</li>
+          <li>Rasio kekuatan-terhadap-berat sangat baik</li>
+          <li>Kompatibel MRI — artefak minimal</li>
+          <li>Material pilihan untuk sistem spine</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 12 VERIFIKASI TEKNIS ── -->
+  <section class="slide slide-standard" data-chapter="6">
+    <div class="slide-tag">Material &amp; Verifikasi</div>
+    <div class="slide-headline">Biokompatibilitas dan performa mekanis diverifikasi terhadap standar internasional</div>
+    <div class="two-col">
+      <div class="spec-block">
+        <div class="spec-label">Biokompatibilitas</div>
+        <div style="font-size:20px; font-weight:800; color:var(--text); margin-bottom:8px;">ISO 10993</div>
+        <div class="spec-desc">Evaluasi biologis dilakukan mengacu pada kerangka ISO 10993 — mencakup pengujian iritasi, sensitisasi, dan sitotoksisitas.</div>
+        <div class="spec-desc" style="margin-top:12px; padding:12px 14px; background:var(--accent-lt); border:1px solid var(--accent-bd); border-radius:8px;">
+          <strong style="color:var(--accent);">Biological Evaluation Report (BER)</strong> mengkonfirmasi bahwa produk jadi aman secara biologis dan memenuhi syarat sebagai implan permanen.
+        </div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:14px;">
+        <div class="verif-block">
+          <div class="verif-icon">🔩</div>
+          <div class="verif-std">ASTM F543</div>
+          <div class="verif-name">Metallic Bone Screws</div>
+          <div class="verif-desc">Verifikasi kesesuaian dimensional, kekuatan torsi, kekuatan tarik, dan evaluasi performa kelelahan untuk bone screw.</div>
+        </div>
+        <div class="verif-block">
+          <div class="verif-icon">🦴</div>
+          <div class="verif-std">ASTM F382</div>
+          <div class="verif-name">Bone Plates</div>
+          <div class="verif-desc">Pengujian mekanis untuk bone plate — termasuk kekuatan bending dan fatigue performance evaluation.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 13 KOLABORASI AKADEMIK ── -->
+  <section class="slide slide-standard" data-chapter="7">
+    <div class="slide-tag">Inovasi &amp; Kolaborasi</div>
+    <div class="slide-headline">Kolaborasi dengan institusi akademik mendorong inovasi produk baru</div>
+    <div class="cards-grid g-2">
+      <div class="innov-card">
+        <div class="innov-year">KEDAIREKA 2022</div>
+        <div class="innov-title">Implan PEEK untuk TLIF</div>
+        <div class="innov-partner">Universitas Indonesia</div>
+        <div class="innov-desc">Pengembangan implan PEEK untuk Transforaminal Lumbar Interbody Fusion — material radiopaque dengan modulus yang mendekati tulang kortikal.</div>
+        <span class="innov-status status-done">Selesai</span>
+      </div>
+      <div class="innov-card">
+        <div class="innov-year">KEDAIREKA 2023</div>
+        <div class="innov-title">Kantong Darah Antikoagulan &amp; Antibakteri</div>
+        <div class="innov-partner">Universitas Airlangga</div>
+        <div class="innov-desc">Riset pengembangan kantong darah dengan sifat antikoagulan dan antibakteri — memperluas domain inovasi Trafas.</div>
+        <span class="innov-status status-done">Selesai</span>
+      </div>
+      <div class="innov-card">
+        <div class="innov-year">Proyek Doktoral 2024</div>
+        <div class="innov-title">Mini Screw Ti Grade 2</div>
+        <div class="innov-partner">Universitas Indonesia</div>
+        <div class="innov-desc">Kolaborasi proyek doktoral untuk mini screw berbahan titanium Grade 2 — biokompatibilitas tinggi untuk aplikasi CMF presisi.</div>
+        <span class="innov-status status-done">Selesai</span>
+      </div>
+      <div class="innov-card">
+        <div class="innov-year">2025 — Berlangsung</div>
+        <div class="innov-title">Distal Femur Megaprosthesis</div>
+        <div class="innov-partner">Universitas Indonesia</div>
+        <div class="innov-desc">Implan modular besar untuk rekonstruksi femur distal — relevan untuk reseksi tumor, fraktur kompleks, dan arthroplasty yang gagal.</div>
+        <span class="innov-status status-active">Sedang Berjalan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 14 PROYEK AKTIF ── -->
+  <section class="slide slide-standard" data-chapter="7">
+    <div class="slide-tag">Inovasi &amp; Kolaborasi</div>
+    <div class="slide-headline">Proyek pengembangan aktif — kapabilitas rekayasa yang terus berkembang</div>
+    <div class="two-col">
+      <div class="focus-card" style="border-color:var(--accent-bd);">
+        <div class="focus-num" style="color:rgba(0,180,216,0.12);">DVR</div>
+        <div class="focus-name" style="font-size:19px;">Direct Vertebral Derotator</div>
+        <div class="focus-desc">Instrumen bedah tulang belakang yang dirancang untuk mengatasi komponen rotasi pada skoliosis. Memungkinkan koreksi rotasi vertebra secara langsung selama operasi — meningkatkan hasil koreksi kurva pada kasus skoliosis kompleks.</div>
+        <div class="focus-tag">Sedang Dikembangkan</div>
+      </div>
+      <div class="focus-card" style="border-color:var(--accent-bd);">
+        <div class="focus-num" style="color:rgba(0,180,216,0.12);">MP</div>
+        <div class="focus-name" style="font-size:19px;">Distal Femur Megaprosthesis</div>
+        <div class="focus-desc">Implan modular besar untuk rekonstruksi area femur distal dan sendi lutut — dirancang untuk kasus reseksi tumor tulang, fraktur kompleks periartikular, dan kegagalan arthroplasty yang memerlukan penggantian segmen tulang ekstensif.</div>
+        <div class="focus-tag">Berlangsung — 2025</div>
+      </div>
+    </div>
+    <div class="info-bar" style="margin-top:16px;">
+      <div class="info-bar-label">Makna Strategis</div>
+      <div class="info-bar-value">Trafas tidak hanya memproduksi — tetapi juga <span>mengembangkan solusi klinis baru</span> untuk kebutuhan yang belum terpenuhi di pasar</div>
+    </div>
+  </section>
+
+  <!-- ── 15 RINGKASAN ── -->
+  <section class="slide slide-standard" data-chapter="8">
+    <div class="slide-tag">Penutup</div>
+    <div class="slide-headline">Mengapa PT Trafas Dwi Medika</div>
+    <div class="statements">
+      <div class="stmt-row">
+        <div class="stmt-num">01</div>
+        <div class="stmt-text">Manufaktur implan ortopedi Indonesia berbasis rekayasa biomedis — trauma, spine, dan CMF</div>
+      </div>
+      <div class="stmt-row">
+        <div class="stmt-num">02</div>
+        <div class="stmt-text">Tersertifikasi ISO 13485:2016 (TÜV NORD) · CPAKB berlisensi aktif hingga 2031</div>
+      </div>
+      <div class="stmt-row">
+        <div class="stmt-num">03</div>
+        <div class="stmt-text">Material implant-grade SS316LVM &amp; Ti-6Al-4V ELI — biokompatibilitas dievaluasi ISO 10993 dengan BER</div>
+      </div>
+      <div class="stmt-row">
+        <div class="stmt-num">04</div>
+        <div class="stmt-text">Verifikasi mekanis ASTM F543 &amp; F382 — traceability penuh dari bahan baku hingga produk jadi</div>
+      </div>
+      <div class="stmt-row">
+        <div class="stmt-num">05</div>
+        <div class="stmt-text">4 kolaborasi riset dengan universitas terkemuka — KEDAIREKA, proyek doktoral, pengembangan aktif</div>
+      </div>
+      <div class="stmt-row">
+        <div class="stmt-num">06</div>
+        <div class="stmt-text">R&amp;D aktif: DVR untuk koreksi skoliosis &amp; Distal Femur Megaprosthesis — kedalaman kapabilitas rekayasa</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 16 CLOSING STATEMENT ── -->
+  <section class="slide" data-chapter="8" style="align-items:flex-start; justify-content:center; padding:56px 80px;">
+    <div style="position:absolute; top:0; right:0; width:50%; height:100%; background:radial-gradient(ellipse at 80% 50%, rgba(0,180,216,0.1) 0%, transparent 65%); pointer-events:none;"></div>
+    <div style="position:relative; z-index:1; max-width:640px;">
+      <div class="slide-tag" style="margin-bottom:20px;">Komitmen Kami</div>
+      <div style="font-size:36px; font-weight:900; color:var(--text); line-height:1.25; margin-bottom:20px;">
+        Dirancang untuk anatomi.<br>
+        <span style="color:var(--accent);">Diproduksi untuk kualitas.</span><br>
+        Diverifikasi untuk kepercayaan.
+      </div>
+      <div style="width:52px; height:3px; background:var(--accent); border-radius:2px; margin-bottom:24px;"></div>
+      <div style="font-size:15px; color:var(--text-2); line-height:1.65; max-width:520px;">
+        PT Trafas Dwi Medika membangun solusi implan ortopedi yang relevan secara klinis, terkontrol secara kualitas, dan siap berkembang melalui inovasi serta kolaborasi.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 17 KONTAK ── -->
+  <section class="slide slide-standard" data-chapter="8">
+    <div class="slide-tag">Kontak</div>
+    <div class="slide-headline">Hubungi kami untuk pertanyaan klinis, pengadaan, dan kemitraan.</div>
+    <div class="contact-grid">
+      <div class="contact-block">
+        <div class="contact-label">Website</div>
+        <div class="contact-value mono">www.trafasmedical.com</div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-label">Email</div>
+        <div class="contact-value mono">cs.connect@trafasdwimedika.com</div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-label">Telepon</div>
+        <div class="contact-value">+62 (81) 1112-2022<br><span class="contact-muted">(021) 879-46067</span></div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-label">Pabrik</div>
+        <div class="contact-value" style="font-size:13px;">Jl. Tengsaw No. 9C, Tarikolot<br>Citeureup, Kabupaten Bogor, Jawa Barat</div>
+      </div>
+      <div class="contact-block" style="grid-column:1/-1;">
+        <div class="contact-label">Kantor</div>
+        <div class="contact-value" style="font-size:13px;">Pulo Gadung Trade Centre (PTC) Ruko 8C No. 26, Pulo Gadung, Jakarta Timur 13920</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div id="nav-prev" onclick="changeSlide(-1)">&#8592;</div>
+  <div id="nav-next" onclick="changeSlide(1)">&#8594;</div>
+</main>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  const chapterBtns = Array.from(document.querySelectorAll('.chapter-btn'));
+  let current = 0;
+
+  // Ch 0: slide 1 (idx 0)   — Pembuka
+  // Ch 1: slides 2-3 (1-2)  — Siapa Kami
+  // Ch 2: slide 4 (3)       — Perjalanan
+  // Ch 3: slides 5-6 (4-5)  — Fokus Produk
+  // Ch 4: slides 7-8 (6-7)  — Kapabilitas
+  // Ch 5: slides 9-10 (8-9) — Kualitas & Kepatuhan
+  // Ch 6: slides 11-12 (10-11) — Material & Verifikasi
+  // Ch 7: slides 13-14 (12-13) — Inovasi & Kolaborasi
+  // Ch 8: slides 15-17 (14-16) — Penutup
+  const chapterStarts = [0, 1, 3, 4, 6, 8, 10, 12, 14];
+
+  function showSlide(index) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(index, slides.length - 1));
+    slides[current].classList.add('active');
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    updateSidebar();
+  }
+
+  function changeSlide(dir) { showSlide(current + dir); }
+  function jumpToChapter(i) { showSlide(chapterStarts[i]); }
+
+  function updateSidebar() {
+    const ch = parseInt(slides[current].getAttribute('data-chapter'));
+    chapterBtns.forEach((btn, i) => btn.classList.toggle('active', i === ch));
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+  });
+
+  updateSidebar();
+</script>
 </body>
 </html>
